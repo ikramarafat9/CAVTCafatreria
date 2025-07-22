@@ -1,34 +1,26 @@
 {% extends 'navbar.html' %}
 {% block body %}
 
- <video autoplay muted loop class="w-100 h-100">
+ <video autoplay muted loop class="w-100 h-100 hide-on-mobile">
     <source src="../static/image/CAVT_Video.mp4" type="video/mp4" />
     المتصفح لا يدعم عرض الفيديو.
   </video>
 
-<div class="row h-20 position-fixed bottom-0 start-50 translate-middle-x p-3 w-50">
-
-    <div class="col-md-3">
-        <a href="/track" class="text-decoration-none">
-            <div class="service-card background-color-f0f0f0ba p-2 rounded-4 shadow-lg h-100 ">
-                <span class="emoji-hover">⏰</span>
-                <img src="../static/image/T1.png" class="width-50px m-1" />
-                <br>
-                <label class="m-0 fw-bold fs-6 color-AB131C">Track Your Order</label>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-3" title="View Menu">
-        <a href="/menu" class="text-decoration-none">
+<div class="row h-20 position-fixed bottom-0 start-50 translate-middle-x p-3 w-50 height-30 display-contents-mobile
+height-80-mobile">
+    <div class="col-md-3 p-2" title="feedback">
+        <a href="/feedback" class="text-decoration-none">
             <div class="service-card background-color-f0f0f0ba p-2 rounded-4 shadow-lg h-100">
-                <span class="emoji-hover">📋</span>
-                <img src="../static/image/V1.png" class="width-50px m-1" alt="Menu" />
+                <span class="emoji-hover">💬</span>
+                <div class="d-flex justify-content-center">
+                    <img src="../static/image/C1.png" class="width-50px m-1" alt="feedback" />
+                </div>
                 <br>
-                <label class="m-0 fw-bold fs-6 color-AB131C">View Menu</label>
+                <label class="m-0 fw-bold fs-6 color-AB131C">Comments</label>
             </div>
         </a>
     </div>
-    <div class="col-md-3" title="Account">
+    <div class="col-md-3 p-2 " title="Account">
         <a href="/account" class="text-decoration-none">
             <div class="service-card background-color-f0f0f0ba p-2 rounded-4 shadow-lg h-100">
                 <span class="emoji-hover">👤</span>
@@ -38,15 +30,23 @@
             </div>
         </a>
     </div>
-    <div class="col-md-3" title="feedback">
-        <a href="/feedback" class="text-decoration-none">
+    <div class="col-md-3 p-2" title="View Menu">
+        <a href="/menu" class="text-decoration-none">
             <div class="service-card background-color-f0f0f0ba p-2 rounded-4 shadow-lg h-100">
-                <span class="emoji-hover">💬</span>
-                <div class="d-flex justify-content-center">
-                    <img src="../static/image/C1.png" class="width-50px m-1" alt="feedback" />
-                </div>
+                <span class="emoji-hover">📋</span>
+                <img src="../static/image/V1.png" class="width-50px m-1" alt="Menu" />
                 <br>
-                <label class="m-0 fw-bold fs-6 color-AB131C">Comments</label>
+                <label class="m-0 fw-bold fs-6 color-AB131C">View Menu</label>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3 p-2">
+        <a href="/track" class="text-decoration-none">
+            <div class="service-card background-color-f0f0f0ba p-2 rounded-4 shadow-lg h-100 ">
+                <span class="emoji-hover">⏰</span>
+                <img src="../static/image/T1.png" class="width-50px m-1" />
+                <br>
+                <label class="m-0 fw-bold fs-6 color-AB131C">Track Your Order</label>
             </div>
         </a>
     </div>

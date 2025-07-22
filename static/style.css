@@ -205,13 +205,76 @@ border: none !important;
 .max-width-555px{
     max-width: 555px;
 }
+.height-30{
+    height: 30%;
+}
 
 /* إخفاء رابط إنشاء حساب في الشاشات التي أقل من 768px */
 @media (max-width: 767.98px) {
   .hide-on-mobile {
     display: none !important;
   }
+  .bigger-logo{
+        max-width: 140px !important;
+
+  }
+  .text-center-mobile{
+    text-align: center !important;
+  }
+  .display-contents-mobile{
+    display: contents !important;
+  }
+  .height-80-mobile{
+        height: 80% !important;
+  }
+    .show-on-mobile {
+    display:inline !important;
+  }
 }
+
+
+
+
+  @media (max-width: 768px) {
+    .responsive-items-table thead {
+      display: none;
+    }
+
+    .responsive-items-table,
+    .responsive-items-table tbody,
+    .responsive-items-table tr,
+    .responsive-items-table td {
+      display: block;
+      width: 100%;
+    }
+
+    .responsive-items-table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .responsive-items-table td {
+      text-align: right;
+      padding: 10px;
+      position: relative;
+      border: none !important;
+    }
+
+  }
+
+  .width-70px {
+    width: 70px;
+  }
+
+  .height-70px {
+    height: 70px;
+    object-fit: cover;
+  }
+
 
 
 

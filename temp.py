@@ -434,7 +434,6 @@ def account():
 #--------------------------------------------------------------------------------------------------------------------- 
 
 @app.route('/about_app')
-@login_required
 def waiting():
     return render_template('about_app.html')
 
@@ -852,59 +851,72 @@ def mark_ready(order_id):
 
 #---------------------------------------------------------------------------------------------------------------------
 
-
 @app.route('/order_waiting/<int:order_id>')
 @login_required
 def order_waiting(order_id):
     conn = get_db_connection()
 
-    # جلب بيانات الطلب
-    order = conn.execute('''
-        SELECT id, order_time, status
-        FROM orders
-        WHERE id = ?
-    ''', (order_id,)).fetchone()
-
-    if not order:
+    # جلب وقت الطلب المحدد
+    selected_order = conn.execute('SELECT * FROM orders WHERE id = ?', (order_id,)).fetchone()
+    if not selected_order:
         conn.close()
         flash("🚫 لم يتم العثور على الطلب.")
         return redirect(url_for('home'))
 
-    # جلب عناصر الطلب
-    rows = conn.execute('''
-        SELECT od.quantity, od.base_price, od.extra_price, od.details_json,
-               m.name AS item_name
-        FROM order_details od
-        JOIN MenuItem m ON od.item_id = m.id
-        WHERE od.order_id = ?
-    ''', (order_id,)).fetchall()
+    order_date = selected_order['order_time'].split(" ")[0]  # جزء التاريخ فقط
 
-    order_items = []
-    total = 0
+    # جلب كل الطلبات للمستخدم في نفس اليوم
+    user_id = session.get('user_id')
+    orders = conn.execute('''
+        SELECT id, order_time, status
+        FROM orders
+        WHERE user_id = ? AND DATE(order_time) = ?
+        ORDER BY order_time DESC
+    ''', (user_id, order_date)).fetchall()
 
-    for row in rows:
-        details = json.loads(row['details_json']) if row['details_json'] else {}
-        fixed_ingredients = details.get('fixed_ingredients', [])
-        custom_options = details.get('custom_options', [])
-        notes = details.get('notes', '')
+    all_orders = []
+    for order in orders:
+        order_id = order['id']
+        rows = conn.execute('''
+            SELECT od.quantity, od.base_price, od.extra_price, od.details_json,
+                   m.name AS item_name
+            FROM order_details od
+            JOIN MenuItem m ON od.item_id = m.id
+            WHERE od.order_id = ?
+        ''', (order_id,)).fetchall()
 
-        total_price = row['base_price'] + row['extra_price']
-        total += total_price * row['quantity']
+        order_items = []
+        total = 0
 
-        order_items.append({
-            'item_name': row['item_name'],
-            'quantity': row['quantity'],
-            'base_price': row['base_price'],
-            'extra_price': row['extra_price'],
-            'fixed_ingredients': fixed_ingredients,
-            'custom_options': custom_options,
-            'notes': notes
+        for row in rows:
+            details = json.loads(row['details_json']) if row['details_json'] else {}
+            fixed_ingredients = details.get('fixed_ingredients', [])
+            custom_options = details.get('custom_options', [])
+            notes = details.get('notes', '')
+
+            total_price = row['base_price'] + row['extra_price']
+            total += total_price * row['quantity']
+
+            order_items.append({
+                'item_name': row['item_name'],
+                'quantity': row['quantity'],
+                'base_price': row['base_price'],
+                'extra_price': row['extra_price'],
+                'fixed_ingredients': fixed_ingredients,
+                'custom_options': custom_options,
+                'notes': notes
+            })
+
+        all_orders.append({
+            'id': order['id'],
+            'order_time': order['order_time'],
+            'status': order['status'],
+            'items': order_items,
+            'total': round(total, 2)
         })
 
     conn.close()
-    return render_template('order_confirmed.html', order=order, order_items=order_items, total=round(total, 2))
-
-
+    return render_template('order_confirmed.html', orders=all_orders)
 
 
 #---------------------------------------------------------------------------------------------------------------------
@@ -915,19 +927,22 @@ def track_latest_order():
     user_id = session.get('user_id')
 
     conn = get_db_connection()
-    order = conn.execute('''
-        SELECT id FROM orders
+    latest_order = conn.execute('''
+        SELECT id
+        FROM orders
         WHERE user_id = ? AND status = 'confirmed'
         ORDER BY order_time DESC
         LIMIT 1
     ''', (user_id,)).fetchone()
     conn.close()
 
-    if not order:
-        flash(" لا يوجد طلب لتتبعه. اطلب الآن أولاً!")
+    if not latest_order:
+        flash("لا يوجد طلب لتتبعه. اطلب الآن أولاً!")
         return redirect(url_for('homepage'))
 
-    return redirect(url_for('order_waiting', order_id=order['id']))
+    return redirect(url_for('order_waiting', order_id=latest_order['id']))
+
+
 
 
 #---------------------------------------------------------------------------------------------------------------------

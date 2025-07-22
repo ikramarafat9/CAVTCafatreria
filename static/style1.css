@@ -124,6 +124,58 @@
   }
 }
 
-.special-card {
+/* تعديل التنسيق الأساسي للشاشات الصغيرة */
+@media (max-width: 768px) {
+  .main,
+  .container,
+  .intro,
+  .AppDev {
+    flex-direction: column !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
+    padding: 10px !important;
+  }
 
+  .intro,
+  .AppDev {
+    margin: 0 auto !important;
+  }
+
+  .card {
+    max-width: 100% !important;
+  }
+
+  .img img {
+    width: 90px !important;
+    height: 90px !important;
+  }
+
+  .name {
+    font-size: 16px !important;
+  }
+
+  .role {
+    font-size: 14px !important;
+  }
+}
+
+/* تحسين إضافي لأصغر الشاشات */
+@media (max-width: 480px) {
+  .intro-text {
+    font-size: 13px !important;
+    padding: 10px !important;
+  }
+
+  .section-title {
+    font-size: 20px !important;
+  }
+
+  .img img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .card {
+    padding: 15px !important;
+  }
 }

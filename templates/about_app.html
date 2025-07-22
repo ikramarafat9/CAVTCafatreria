@@ -3,8 +3,16 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
 
 <div class="container py-5 d-flex">
+
   <section class="intro mb-5 col-md-4">
     <h2 class="section-title text-center mb-4">حول التطبيق</h2>
+
+ <video autoplay muted loop class="w-100 h-100 show-on-mobile" style="display: none;">
+    <source src="../static/image/CAVT_Video.mp4" type="video/mp4" />
+    المتصفح لا يدعم عرض الفيديو.
+  </video>
+
+
     <p class="intro-text">
       <strong>مرحباً بكم في تطبيقنا</strong><br><br>
       يسعدنا أن نقدم لكم هذه النسخة التجريبية من تطبيق الكافتيريا الخاص بكلية التدريب المهني المتقدم - إناث إربد، والذي يهدف إلى تسهيل عملية الطلبات بين المتدربين والهيئة العاملة في الكلية والكافتيريا بشكل رقمي ومرن. تم تصميم هذا التطبيق كخطوة أولى نحو تطوير حلول تقنية تدعم بيئة الكلية وتسهم في تحسين تجربة المستخدم، وقد تم تطويره بأيدي متدربين برنامج مطور التطبيقات المتقدمة.
@@ -25,8 +33,8 @@
     <div class="row g-4 justify-content-center">
       {% set members = [
         {'name': 'Eng. Asmaa Shtayat', 'role': 'Supervisor(Application development Trainer)', 'img': 'ourImage/EngAsmaa.jpeg'},
-        {'name': 'Majd Almomani', 'role': 'Back-End Developer', 'img': 'ourImage/Majd.jpeg'},
         {'name': 'Eng.Ikram Arafat', 'role': 'Team Leader / Full-Stack Developer', 'img': 'ourImage/Ikram.jpeg'},
+        {'name': 'Majd Almomani', 'role': 'Back-End Developer', 'img': 'ourImage/Majd.jpeg'},
         {'name': 'Eng.Wasan Alkaraswah', 'role': 'Back-End Developer', 'img': 'ourImage/Wasan.jpeg'},
         {'name': 'Noor Ez Aldeen', 'role': 'Designer / Back-End Developer ', 'img': 'ourImage/Noor2.jpeg'},
         {'name': 'Mohammad Hijazi', 'role': 'Database Developer', 'img': 'ourImage/hijazi.jpeg'},

@@ -2,70 +2,88 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>{{ pagetitle }} </title>
+  <title>{{ pagetitle }}</title>
+
+  <!-- أيقونة -->
   <link rel="icon" href="{{ url_for('static', filename='image/CAVT_logo.svg') }}">
+
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+  <!-- CSS خاص -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+  <!-- Viewport مهم جداً للموبايل -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="background-color-f0f0f0 ">
-  <header class="background-color-AB131C text-white text-center fs-5 fw-bold position-relative">
-    <div class=" row">
-        <div class="col-md-3 d-flex px-3 py-2">
-            <div class="dropdown">
-                <button class="dropdown-toggle bg-transparent border-0 text-white rounded" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                     <i class="bi bi-list menu-icon"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/about_app">حول التطبيق</a></li>
-                    <li><a class="dropdown-item" href="https://www.cavt.jo/ar/%d8%a7%d8%aa%d8%b5%d9%84-%d8%a8%d9%86%d8%a7/">اتصل بنا</a></li>
 
-                {% if session.get('user_id') and (session.get('role_id') != 1) %}
-                
-                    <li><a class="dropdown-item" href="/feedback">تقديم ملاحظات</a></li>
-                {% endif %}
-                {% if session.get('role_id') == 1 or session.get('role_id') == 4  %}
-                    <li><a class="dropdown-item" href="/Showfeedbacks"> الملاحظات </a></li>
-                {% endif %}
-                {% if session.get('user_id') %}
+<body class="background-color-f0f0f0">
+
+  <!-- الهيدر -->
+  <header class="background-color-AB131C text-white fs-5 fw-bold py-2">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+
+        <!-- القائمة والروابط -->
+        <div class="col-12 col-md-3 d-flex flex-column flex-md-row align-items-center justify-content-between px-3">
+          <div class="dropdown mb-2 mb-md-0">
+            <button class="dropdown-toggle bg-transparent border-0 text-white fs-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list menu-icon"></i>
+            </button>
+            <ul class="dropdown-menu text-end">
+              <li><a class="dropdown-item" href="/about_app">حول التطبيق</a></li>
+              <li><a class="dropdown-item" href="https://www.cavt.jo/ar/%d8%a7%d8%aa%d8%b5%d9%84-%d8%a8%d9%86%d8%a7/">اتصل بنا</a></li>
+              {% if session.get('user_id') and (session.get('role_id') != 1) %}
+                <li><a class="dropdown-item" href="/feedback">تقديم ملاحظات</a></li>
+              {% endif %}
+              {% if session.get('role_id') == 1 or session.get('role_id') == 4 %}
+                <li><a class="dropdown-item" href="/Showfeedbacks">الملاحظات</a></li>
+              {% endif %}
+              {% if session.get('user_id') %}
                 <li><a class="dropdown-item" href="/logout">تسجيل خروج</a></li>
-                {% endif %}
-                </ul>
-            </div> 
+              {% endif %}
+            </ul>
+          </div>
 
-            <div class="mx-2">
+          <div class="text-center text-md-start">
             {% if not session.get('user_id') %}
-                <a href="signup" class="text-white text-decoration-none ms-1 fons-size14px">إنشاء حساب</a>
+              <a href="signup" class="text-white text-decoration-none me-2  hide-on-mobile" style="font-size: 14px;">إنشاء حساب</a>
             {% endif %}
-            {% if session.get('user_id') and (session.get('role_id') != 1 )%}
-                <a href="/home" class="text-white text-decoration-none ms-1 fons-size14px">الصفحة الرئيسية</a>
-                <a href="/menu" class="text-white text-decoration-none ms-1 fons-size14px">قائمة الطعام</a>
-             {% endif %}
-            {% if session.get('user_id') and (session.get('role_id') == 1 )%}
-                <a href="/admin" class="text-white text-decoration-none ms-1 fons-size14px">الصفحة الرئيسية</a>
+            {% if session.get('user_id') and (session.get('role_id') != 1) %}
+              <a href="/home" class="text-white text-decoration-none me-2" style="font-size: 14px;">الصفحة الرئيسية</a>
+              <a href="/menu" class="text-white text-decoration-none me-2" style="font-size: 14px;">قائمة الطعام</a>
             {% endif %}
-            </div>
-            
+            {% if session.get('user_id') and (session.get('role_id') == 1) %}
+              <a href="/admin" class="text-white text-decoration-none me-2" style="font-size: 14px;">الصفحة الرئيسية</a>
+            {% endif %}
+          </div>
         </div>
-        <div class="col-md-6 p-2">
-            كفتيريا كلية التدريب المهني المتقدم في الأردن / إناث إربد
+
+        <!-- اسم الكافتيريا -->
+        <div class="col-12 col-md-6 py-2 text-center">
+          كفتيريا كلية التدريب المهني المتقدم في الأردن / إناث إربد
         </div>
-        <div class="col-md-3">
-            <a href="https://www.cavt.jo/ar/" class="d-flex flex-row-reverse ">
-                <img class="w-29 position-relative"  style="right: 7px;" src="{{ url_for('static', filename= 'image/1.svg')}}" alt="">
-            </a>
+
+        <!-- شعار المؤسسة -->
+        <div class="col-12 col-md-3 text-center text-md-end py-2 hide-on-mobile">
+          <a href="https://www.cavt.jo/ar/">
+            <img src="{{ url_for('static', filename='image/1.svg') }}" alt="شعار" style="max-width: 90px;" class="img-fluid">
+          </a>
         </div>
-        
+
+      </div>
     </div>
- </header>
+  </header>
+
+  <!-- محتوى الصفحة -->
+  <main>
     {% block body %}
+    {% endblock %}
+  </main>
 
-    {% endblock  %}
-    
- 
+  <!-- Bootstrap Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </html>

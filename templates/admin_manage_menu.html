@@ -1,0 +1,88 @@
+{% extends 'navbar.html' %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="card p-4 rounded-4 shadow-lg mx-auto max-width-800px">
+        <h4 class="text-center mb-4 color-AB131C fw-bold">إدارة القائمة</h4>
+
+        <!-- الفلتر -->
+        <select id="sectionFilter" class="form-select mb-4 rounded-3 border border-1">
+            <option value="items" selected>🍔 إدارة الأصناف</option>
+            <option value="categories">📂 إدارة الفئات</option>
+            <option value="fixed">🥬 المكونات الثابتة</option>
+            <option value="custom">🧂 المكونات القابلة للتخصيص</option>
+        </select>
+
+        <!-- رسائل الفلاش -->
+        <div id="flash-message" class="alert alert-info text-center" style="display:none;"></div>
+
+        <!-- الأقسام -->
+        <div class="section-block" data-section="categories">
+            {% include 'admin_parts/manage_categories.html' %}
+        </div>
+
+        <div class="section-block" data-section="items">
+            {% include 'admin_parts/manage_items.html' %}
+        </div>
+
+        <div class="section-block" data-section="fixed">
+            {% include 'admin_parts/add_fixed_ingredients.html' %}
+            {% include 'admin_parts/link_fixed_ingredients.html' %}
+        </div>
+
+        <div class="section-block" data-section="custom">
+            {% include 'admin_parts/add_customizable_ingredients.html' %}
+            {% include 'admin_parts/add_customizable_options.html' %}
+            {% include 'admin_parts/link_customizable_options.html' %}
+        </div>
+    </div>
+</div>
+
+<!-- اسكربت الرسالة -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        const flashMessage = document.getElementById('flash-message');
+        flashMessage.innerText = "{{ messages[0] }}";
+        flashMessage.style.display = 'block';
+        setTimeout(() => {
+          flashMessage.style.display = 'none';
+        }, 3000);
+      {% endif %}
+    {% endwith %}
+  });
+</script>
+
+<!-- اسكربت الفلترة -->
+<script>
+function showSelectedSection(selected) {
+    const sections = document.querySelectorAll('.section-block');
+    sections.forEach(section => {
+        const type = section.getAttribute('data-section');
+        section.style.display = (type === selected) ? 'block' : 'none';
+    });
+    // احفظ الخيار في localStorage
+    localStorage.setItem("selectedSection", selected);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const sectionFilter = document.getElementById('sectionFilter');
+    const savedSection = localStorage.getItem("selectedSection");
+
+    // إذا في خيار محفوظ، رجّعه
+    if (savedSection) {
+        sectionFilter.value = savedSection;
+        showSelectedSection(savedSection);
+    } else {
+        showSelectedSection(sectionFilter.value); // الافتراضي
+    }
+
+    // لما تتغير القيمة من المستخدم
+    sectionFilter.addEventListener('change', function () {
+        showSelectedSection(this.value);
+    });
+});
+</script>
+
+{% endblock %}

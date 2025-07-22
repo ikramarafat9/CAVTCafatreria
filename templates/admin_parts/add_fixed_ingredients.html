@@ -1,0 +1,59 @@
+<!-- admin_parts/add_fixed_ingredients.html -->
+<section class="container mb-5">
+  <h4 class="color-AB131C fw-bold mb-4">🥬 المكونات الثابتة</h4>
+
+  <!-- إضافة مكون ثابت جديد -->
+  <form method="POST" class="bg-white border border-2 rounded-4 shadow-sm p-4 mb-4">
+    <div class="input-group">
+      <input type="text" name="add_fixed_name" class="form-control rounded-3 border border-1" placeholder="اسم المكون الثابت" required>
+      <button type="submit" name="action" value="add_fixed" class="btn background-color-AB131C text-white fw-bold rounded-3">
+        ➕ إضافة مكون ثابت
+      </button>
+    </div>
+  </form>
+
+  <!-- عرض المكونات الثابتة مع تعديل وحذف -->
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered text-center align-middle m-0">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>اسم المكون</th>
+          <th>تعديل</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fixed in fixed_ingredients %}
+        <tr>
+          <!-- تعديل مكون ثابت -->
+          <form method="POST">
+            <input type="hidden" name="edit_fixed_id" value="{{ fixed.id }}">
+            <td>
+              <input type="text" name="edit_fixed_name" value="{{ fixed.name }}" class="form-control text-center rounded-3 border border-1" required>
+            </td>
+            <td>
+              <button name="action" value="edit_fixed" class="btn no-hover btn-sm w-100 rounded-3">
+                 تعديل
+              </button>
+            </td>
+          </form>
+
+          <!-- حذف مكون ثابت -->
+          <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف المكون الثابت؟');">
+            <input type="hidden" name="delete_fixed_id" value="{{ fixed.id }}">
+            <td>
+              <button name="action" value="delete_fixed" class="btn no-hover btn-sm w-100 rounded-3">
+                 حذف
+              </button>
+            </td>
+          </form>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-muted">لا توجد مكونات ثابتة مضافة بعد.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

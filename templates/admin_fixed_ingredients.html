@@ -1,0 +1,58 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<div class="container mt-4">
+    <h3 class="text-center text-danger mb-4">المكونات الثابتة</h3>
+
+    <!-- عرض الرسائل لمرة واحدة فقط -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="alert alert-info text-center">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- زر الرجوع -->
+    {% include 'back_button.html' %}
+
+    <!-- نموذج إضافة مكون جديد -->
+    <form method="POST" class="mb-4 d-flex gap-2">
+        <input name="add_name" required class="form-control w-50" placeholder="اسم المكون الجديد">
+        <button type="submit" class="btn btn-primary">➕ إضافة</button>
+    </form>
+
+    <!-- جدول المكونات -->
+    <table class="table table-bordered text-center">
+        <thead class="table-danger">
+            <tr>
+                <th>الرقم</th>
+                <th>اسم المكون</th>
+                <th>تعديل</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ing in fixed_ingredients %}
+            <tr>
+                <td>{{ ing.id }}</td>
+                <td>
+                    <form method="POST" class="d-flex justify-content-center">
+                        <input type="hidden" name="edit_id" value="{{ ing.id }}">
+                        <input name="edit_name" value="{{ ing.name }}" class="form-control w-50">
+                        <button class="btn btn-sm btn-success ms-2">✏️ تعديل</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا المكون؟');">
+                        <input type="hidden" name="delete_id" value="{{ ing.id }}">
+                        <button class="btn btn-sm btn-danger">🗑️ حذف</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

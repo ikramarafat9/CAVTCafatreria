@@ -1,0 +1,68 @@
+<section class="container mb-5">
+  <h4 class="color-AB131C fw-bold mb-4">🍔 إدارة المكونات القابلة للتخصيص</h4>
+
+  <!-- إضافة مكون قابل للتخصيص -->
+  <form method="POST" class="bg-white border border-2 rounded-4 shadow-sm p-4 mb-4">
+    <div class="row g-3">
+      <div class="col-md-8">
+        <input type="text" name="add_customizable_name" placeholder="اسم المكون القابل للتخصيص" required
+          class="form-control rounded-3 border border-1">
+      </div>
+      <div class="col-md-4">
+        <button type="submit" name="action" value="add_customizable"
+          class="btn background-color-AB131C text-white w-100 rounded-3 fw-bold">
+          ➕ إضافة مكون
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- عرض المكونات القابلة للتخصيص -->
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered text-center align-middle m-0 table-hover">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>اسم المكون</th>
+          <th>تعديل</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ing in customizables %}
+        <tr>
+          <!-- تعديل -->
+          <form method="POST">
+            <input type="hidden" name="edit_customizable_id" value="{{ ing.id }}">
+            <td>
+              <input type="text" name="edit_customizable_name" value="{{ ing.name }}" required
+                class="form-control text-center rounded-3 border border-1">
+            </td>
+            <td>
+              <button type="submit" name="action" value="edit_customizable"
+                class="btn btn-sm w-100 rounded-3  no-hover">
+                ✏️ تعديل
+              </button>
+            </td>
+          </form>
+
+          <!-- حذف -->
+          <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا المكون؟');">
+            <input type="hidden" name="delete_customizable_id" value="{{ ing.id }}">
+            <td>
+              <button type="submit" name="action" value="delete_customizable"
+                class="btn btn-sm w-100 rounded-3  no-hover"
+                >
+                🗑️ حذف
+              </button>
+            </td>
+          </form>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-muted">لا توجد مكونات مضافة بعد.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

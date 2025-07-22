@@ -1,0 +1,108 @@
+CREATE TABLE "Feedback" (
+	"id"	INTEGER,
+	"content"	TEXT NOT NULL,
+	"feedback_date"	DATETIME DEFAULT CURRENT_TIMESTAMP,
+	"user_id"	INTEGER NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("user_id") REFERENCES "User"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "MenuItem" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	"price"	REAL NOT NULL,
+	"category_id"	INTEGER NOT NULL,
+	"image"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("category_id") REFERENCES "category"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Role" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "User" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	"specialty"	TEXT NOT NULL CHECK("specialty" IN ('مهارات إنتاج المخبوزات والحلويات والمعجنات', 'صانع حلويات شرقية', 'صانع حلويات غربية', 'صانع معجنات', 'حلاق شعر نسائي / كوافيرة أو كوافير', 'مساعد حلاق نسائي', 'مدير', 'مساعد تجميل', 'مختص مكياج', 'منسق إداري طبي', 'حاضنة أطفال', 'خياط ملابس نسائية', 'مشغل / آلة درزة صناعية', 'مدخل بيانات', 'مطور التطبيقات المتقدمة', 'تكنولوجيا إدارة النظم والشبكات', 'صيانة أنظمة ومعدات تقنية المعلومات', 'تكنولوجيا الرسم الهندسي وتطبيقاته')),
+	"password"	TEXT NOT NULL,
+	"phone_number"	TEXT NOT NULL CHECK(length("phone_number") = 10),
+	"role_id"	INTEGER NOT NULL DEFAULT 3,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("role_id") REFERENCES "Role"("id") ON DELETE CASCADE
+);
+
+
+CREATE TABLE "category" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "customizable_ingredients" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+
+CREATE TABLE "customizable_options" (
+	"id"	INTEGER,
+	"customizable_ingredient_id"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"extra_price"	REAL DEFAULT 0,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("customizable_ingredient_id") REFERENCES "customizable_ingredients"("id") ON DELETE CASCADE
+
+);
+
+CREATE TABLE "fixed_ingredients" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "item_customizable_options" (
+	"id"	INTEGER,
+	"item_id"	INTEGER NOT NULL,
+	"customizable_option_id"	INTEGER NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("customizable_option_id") REFERENCES "customizable_options"("id") ON DELETE CASCADE,
+	FOREIGN KEY("item_id") REFERENCES "MenuItem"("id") ON DELETE CASCADE
+
+);
+
+CREATE TABLE "item_fixed_ingredients" (
+	"id"	INTEGER,
+	"item_id"	INTEGER NOT NULL,
+	"fixed_ingredient_id"	INTEGER NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("fixed_ingredient_id") REFERENCES "fixed_ingredients"("id")ON DELETE CASCADE,
+
+	FOREIGN KEY("item_id") REFERENCES "MenuItem"("id") ON DELETE CASCADE
+
+);
+
+CREATE TABLE "order_details" (
+	"id"	INTEGER,
+	"order_id"	INTEGER NOT NULL,
+	"item_id"	INTEGER NOT NULL,
+	"quantity"	INTEGER DEFAULT 1,
+	"base_price"	REAL NOT NULL,
+	"extra_price"	REAL DEFAULT 0,
+	"details_json"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("item_id") REFERENCES "MenuItem"("id") ON DELETE CASCADE,
+	FOREIGN KEY("order_id") REFERENCES "orders"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE "orders" (
+	"id"	INTEGER,
+	"user_id"	INTEGER NOT NULL,
+	"order_time"	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"status"	TEXT NOT NULL DEFAULT 'pending',
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("user_id") REFERENCES "User"("id") ON DELETE CASCADE
+);

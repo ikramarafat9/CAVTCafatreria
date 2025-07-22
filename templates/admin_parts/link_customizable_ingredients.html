@@ -1,0 +1,100 @@
+
+<section class="mb-5 position-relative">
+  <h5 class="text-primary">🔗 ربط خيارات المكونات القابلة للتخصيص مع الأصناف</h5>
+
+  <!-- مكان ظهور رسالة الفلاش بدون رفع الصفحة -->
+  <div id="flash-message" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+
+  <form method="POST" onsubmit="return confirm('تأكيد الربط؟');">
+    <div class="mb-3">
+      <label for="link_custom_item_id" class="form-label">اختر صنف:</label>
+      <select id="link_custom_item_id" name="link_custom_item_id" class="form-select" required>
+        <option disabled selected>اختر صنفًا</option>
+        {% for item in items %}
+          <option value="{{ item.id }}">{{ item.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">اختر الخيارات:</label>
+      <div class="d-flex flex-wrap gap-3">
+        {% for option in options %}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="custom_option_{{ option.id }}"
+              name="customizable_option_ids"
+              value="{{ option.id }}"
+            >
+            <label class="form-check-label" for="custom_option_{{ option.id }}">
+              {% set matched = customizables | selectattr('id', 'equalto', option.customizable_ingredient_id) | list %}
+              {% if matched|length > 0 %}
+                {{ matched[0].name }}:
+              {% else %}
+                (مكون غير معروف):
+              {% endif %}
+              {{ option.name }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" name="action" value="link_custom" class="btn btn-warning">🔗 ربط الخيارات</button>
+  </form>
+
+  {% if item_custom_links %}
+  <table class="table table-striped mt-3 text-center">
+    <thead class="table-secondary">
+      <tr><th>الصنف</th><th>الخيار</th><th>إلغاء الربط</th></tr>
+    </thead>
+    <tbody>
+      {% for link in item_custom_links %}
+      <tr>
+        <td>{{ link.item_name }}</td>
+        <td>{{ link.option_name }}</td>
+        <td>
+          <form method="POST" onsubmit="return confirm('تأكيد إلغاء الربط؟');" style="display:inline;">
+            <input type="hidden" name="unlink_custom_item_id" value="{{ link.item_id }}">
+            <input type="hidden" name="unlink_custom_option_id" value="{{ link.option_id }}">
+            <button name="action" value="unlink_custom" class="btn btn-outline-danger btn-sm">❌</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="text-center text-muted mt-3">لا توجد روابط مضافة بعد.</div>
+  {% endif %}
+</section>
+
+<!-- سكربت عرض رسائل الفلاش بدون رفع الصفحة -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        let flashContainer = document.getElementById('flash-message');
+        {% for message in messages %}
+          let toast = document.createElement('div');
+          toast.className = 'toast align-items-center text-bg-success border-0 show mb-2';
+          toast.setAttribute('role', 'alert');
+          toast.setAttribute('aria-live', 'assertive');
+          toast.setAttribute('aria-atomic', 'true');
+          toast.innerHTML = `
+            <div class="d-flex">
+              <div class="toast-body">
+                {{ message }}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+          `;
+          flashContainer.appendChild(toast);
+          setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3000);
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  });
+</script>

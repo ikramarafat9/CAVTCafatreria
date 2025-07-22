@@ -1,0 +1,55 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<div class="container mt-4">
+    <h2 class="text-center text-danger mb-4">{{ pagetitle }}</h2>
+
+    <!-- ✅ رسائل الفلاش -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info text-center">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ✅ اختيار صنف -->
+    <form method="get" class="mb-4 text-center">
+        <label class="mb-2">اختر صنف:</label>
+        <select name="item_id" onchange="this.form.submit()" class="form-select w-50 mx-auto">
+            <option disabled selected>اختر صنفًا</option>
+            {% for item in items %}
+                <option value="{{ item.id }}" {% if selected_item and item.id == selected_item.id %}selected{% endif %}>
+                    {{ item.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if selected_item %}
+    <form method="post">
+        <h5 class="mb-3">خيارات التخصيص لـ: <span class="text-primary">{{ selected_item.name }}</span></h5>
+        <div class="row">
+            {% for opt in all_options %}
+                <div class="col-md-4 mb-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="option_ids" value="{{ opt.id }}"
+                            {% if opt.id in linked_option_ids %}checked{% endif %}>
+                        <label class="form-check-label">
+                            {{ opt.ingredient_name }} - {{ opt.option_name }}
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success mt-3">💾 حفظ التغييرات</button>
+        </div>
+    </form>
+    {% endif %}
+
+    <!-- ✅ زر الرجوع إلى القائمة -->
+    {% include 'back_button.html' %}
+</div>
+{% endblock %}

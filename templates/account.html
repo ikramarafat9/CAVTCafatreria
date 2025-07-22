@@ -1,0 +1,105 @@
+{% extends 'navbar.html' %}
+{% block body %}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4 max-width360px w-100 rounded-4">
+    <div class="text-center mb-3">
+      <img src="{{ url_for('static', filename='image/CAVT_logo.svg') }}" alt="شعار الكلية" class="rounded" width="140">
+    </div>
+
+    <form method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">الاسم الكامل</label>
+        <input type="text" id="name" name="name" class="form-control" value="{{ user['name'] }}" required>
+      </div>
+        {% if session.get('user_id') and (session.get('role_id') != 1 )%}
+
+      <div class="mb-3">
+        <label for="specialty" class="form-label">التخصص</label>
+        <select id="specialty" name="specialty" class="form-select" required>
+          <option value="" disabled>اختر التخصص</option>
+
+          {% set options = {
+            'فنون الطهي': [
+              'مهارات إنتاج المخبوزات والحلويات والمعجنات',
+              'صانع حلويات شرقية',
+              'صانع حلويات غربية',
+              'صانع معجنات'
+            ],
+            'التجميل': [
+              'حلاق شعر نسائي / كوافيرة أو كوافير',
+              'مساعد حلاق نسائي',
+              'مساعد تجميل',
+              'مختص مكياج'
+            ],
+            'الإدارة': [
+              'منسق إداري طبي'
+            ],
+            'الرعاية الشخصية': [
+              'حاضنة أطفال',
+              'مساعد رعاية كبار السن'
+            ],
+            'الخياطة': [
+              'خياط ملابس نسائية',
+              'مشغل / آلة درزة صناعية'
+            ],
+            'تكنولوجيا المعلومات': [
+              'مدخل بيانات'
+            ],
+            'البرامج الجديدة (دبلوم)': [
+              'مطور التطبيقات المتقدمة',
+              'تكنولوجيا إدارة النظم والشبكات',
+              'صيانة أنظمة ومعدات تقنية المعلومات',
+              'تكنولوجيا الرسم الهندسي وتطبيقاته'
+            ]
+          } %}
+
+          {% for group, items in options.items() %}
+            <optgroup label="{{ group }}">
+              {% for item in items %}
+                <option value="{{ item }}" {% if user['specialty'] == item %}selected{% endif %}>{{ item }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      
+      {% else %}
+<input type="hidden" id="specialty" name="specialty" value="مدير">
+      {% endif %}
+      <div class="mb-3">
+        <label for="phone" class="form-label">رقم الهاتف</label>
+        <input type="tel" id="phone" name="phone" class="form-control" value="{{ user['phone_number'] }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">كلمة مرور جديدة (اختياري)</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="أدخل كلمة مرور جديدة" value="{{ user['password'] }}" required>
+      </div>
+
+      <button type="submit" class="btn w-100 text-white background-color-AB131C">تحديث</button>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="mt-3">
+            {% for message in messages %}
+              <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="text-center mt-3">
+        {% if session.get('user_id') and (session.get('role_id') != 1 )%}
+          <a href="/home" class="text-decoration-none fons-size14px" style="color: #AB131C; font-weight: bold;">
+        {% else %}
+          <a href="/admin" class="text-decoration-none fons-size14px" style="color: #AB131C; font-weight: bold;">
+        {% endif %}
+          العودة إلى الرئيسية
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

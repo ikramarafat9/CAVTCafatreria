@@ -1,0 +1,238 @@
+DROP TABLE IF EXISTS order_details;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS item_customizable_options;
+DROP TABLE IF EXISTS customizable_options;
+DROP TABLE IF EXISTS customizable_ingredients;
+DROP TABLE IF EXISTS item_fixed_ingredients;
+DROP TABLE IF EXISTS fixed_ingredients;
+DROP TABLE IF EXISTS items;
+DROP TABLE IF EXISTS categories;
+
+CREATE TABLE  category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+items
+
+CREATE TABLE MenuItem (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    category_id  INTEGER NOT NULL,
+    price REAL NOT NULL,
+    image TEXT,
+    FOREIGN KEY (category_id) REFERENCES category(id)
+);
+
+CREATE TABLE fixed_ingredients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE item_fixed_ingredients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER NOT NULL,
+    fixed_ingredient_id INTEGER NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES MenuItem(id),
+    FOREIGN KEY (fixed_ingredient_id) REFERENCES fixed_ingredients(id)
+);
+
+CREATE TABLE customizable_ingredients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE customizable_options (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customizable_ingredient_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    extra_price REAL DEFAULT 0,
+    FOREIGN KEY (customizable_ingredient_id) REFERENCES customizable_ingredients(id)
+);
+
+CREATE TABLE item_customizable_options (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER NOT NULL,
+    customizable_option_id INTEGER NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES MenuItem(id),
+    FOREIGN KEY (customizable_option_id) REFERENCES customizable_options(id)
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    order_time TEXT NOT NULL
+);
+
+CREATE TABLE order_details (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER NOT NULL,
+    item_id INTEGER NOT NULL,
+    quantity INTEGER DEFAULT 1,
+    base_price REAL NOT NULL,
+    extra_price REAL DEFAULT 0,
+    details_json TEXT,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (item_id) REFERENCES  MenuItem(id)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+You said:
+يعني انا فهمت انه بضيف مكون مخصص بعدين خيار تابع له بعدين بربطه بالصنف الي بدي اياه
+
+
+ChatGPT said:
+بالضبط ✔️ فهمك صحيح 100%!
+
+خليني أرتبلك إياها بثلاث خطوات واضحة:
+
+✅ أولًا: إضافة مكون مخصص
+مثلاً:
+
+"نوع الخبز"
+
+"نوع الجبنة"
+
+"نوع الصوص"
+
+يتم إدخالها في جدول customizable_ingredients
+
+✅ ثانيًا: إضافة خيارات تابعة لهذا المكون
+مثلاً لو عندك "نوع الخبز"، تضيف خيارات:
+
+صمون
+
+توست
+
+كايزر
+
+يتم إدخالها في جدول customizable_options
+مع ربط كل خيار بـ customizable_ingredient_id اللي يحدد لأي مكون يتبع.
+
+✅ ثالثًا: ربط الخيارات بالصنف
+مثلاً صنف "شاورما":
+
+تربط له خيارات "نوع الخبز"
+
+وتحدد أي الخيارات المتاحة له: (توست + صمون)
+
+يتم هذا في جدول item_customizable_options
+اللي يربط بين item_id و customizable_option_id
+
+⚡ والنتيجة؟
+كل صنف بيكون عنده:
+
+مكونات مخصصة
+
+وكل مكون فيه خيارات محددة حسب ما اخترت
+
+لو بدك أبدأ الآن بإنشاء صفحة إدارة الخيارات القابلة للتخصيص (الخطوة 2)، فقط اكتبي:
+
+ابدأ ✅
+
+وأنا راح أجهزلك كل شي (route + HTML) بشكل متناسق مع المشروع الحالي.
+
+
+
+
+
+
+
+You said:
+انا بدي يكون الموضوع سهل على الادمن اربط المكونات الثابته بالاصناف الي بدي اياها و ها و اصناف الي بدي اياها اتفقنا المكونات المخصصه بخيارات 
+
+
+ChatGPT said:
+تمام ✅ اتفقنا، وراح أرتّبلك الأمور بطريقة سهلة وواضحة للأدمن:
+
+🔹 المطلوب منك كمشروع:
+✅ أولًا: ربط المكونات الثابتة بالأصناف
+من خلال صفحة اسمها مثلًا: /admin/link-fixed
+
+الأدمن يحدد:
+
+الصنف
+
+ويختار المكونات الثابتة التابعة له (تشيك بوكس ✅)
+
+✅ ثانيًا: ربط المكونات المخصصة + خياراتها بالأصناف
+من خلال صفحة اسمها مثلًا: /admin/link-custom
+
+الأدمن يحدد:
+
+الصنف
+
+ويختار:
+
+المكون المخصص (مثل: نوع الصوص)
+
+الخيارات المتاحة لهذا المكون لهذا الصنف (مثل: ثوم، باربكيو)
+
+✅ جدول قاعدة البيانات الجاهز:
+العلاقة	المكان
+الأصناف ← مكونات ثابتة	item_fixed_ingredients
+الأصناف ← خيارات ← مكون مخصص	item_customizable_options ← مربوط بـ customizable_options ← مربوط بـ customizable_ingredients
+
+💡 خلاصة المطلوب كـ صفحات إدخال:
+الصفحة	الوظيفة
+/admin/fixed-ingredients	إدارة المكونات الثابتة (إضافة/تعديل/حذف)
+/admin/customizable-ingredients	إدارة المكونات القابلة للتخصيص
+/admin/customizable-options	إدارة الخيارات التابعة لكل مكون مخصص
+/admin/link-fixed	ربط المكونات الثابتة بالأصناف
+/admin/link-custom	ربط الخيارات المخصصة بالأصناف
+
+هل أبدأ فورًا الآن بـ:
+
+🧩 صفحة /admin/customizable-options
+لإضافة الخيارات وتحديد المكون الذي تتبعه؟
+
+اكتبي فقط:
+ابدأ بالخيارات ✅
+
+أو إذا بدك نبدأ بـ /admin/link-fixed
+اكتبي:
+ابدأ بالربط الثابت ✅
+
+أنا جاهز أجهزلك كل شيء كامل زي الصفحات السابقة تمامًا.
+
+
+
+
+
+
+
+You said:
+بدي اشوف شوفي تعديلات بالشغل الي اشتغلناه هل في تعديلات
+
+
+ChatGPT said:
+ممتاز إنك بتراجعي شغلك! ✅
+خليني أعملك مراجعة دقيقة للخطوات والصفحات اللي أنجزناها بالفعل، وأوضح إذا كان في أي تعديلات ناقصة أو مطلوبة لاحقًا.
+
+✅ اللي أنجزناه فعليًا (جاهز 100%):
+القسم	الحالة	ملاحظات
+/admin/categories	✔️ إضافة / تعديل / حذف الفئات	✅ كامل
+/admin/items	✔️ إضافة / تعديل / حذف الأصناف + رفع الصور	✅ جاهز
+/admin/fixed-ingredients	✔️ إدارة المكونات الثابتة	✅ كامل
+/admin/customizable-ingredients	✔️ إدارة المكونات القابلة للتخصيص	✅ كامل
+
+⚠️ لم يتم بعد (تحت الإنشاء أو لازم نبدأ):
+القسم	الحالة	ملاحظات
+customizable_options	❌ غير مضافة بعد	يجب إضافة صفحة لإدارة الخيارات المرتبطة بكل مكون مخصص
+/admin/link-fixed	❌ غير مضافة بعد	صفحة تربط المكونات الثابتة بالصنف
+/admin/link-custom	❌ غير مضافة بعد	صفحة تربط خيارات المكونات المخصصة بالصنف

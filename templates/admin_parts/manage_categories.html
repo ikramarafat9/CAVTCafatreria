@@ -1,0 +1,107 @@
+<!-- إدارة الفئات -->
+<section class="container mb-5">
+  <h4 class="text-danger fw-bold mb-4">📂 إدارة الفئات</h4>
+
+  <!-- Toast لرسائل الفلاش -->
+  <div id="flash-message" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+
+
+<form method="POST">
+
+</form>
+
+
+
+  <!-- نموذج إضافة فئة جديدة -->
+  <form method="POST" class="bg-white border border-2 rounded-4 shadow-sm p-4 mb-4">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-8">
+        <input type="text" name="add_category_name" placeholder="اسم الفئة" required
+          class="form-control rounded-3 border border-1">
+      </div>
+      <div class="col-md-4">
+        <button type="submit" name="action" value="add_category"
+          class="btn w-100 rounded-3 fw-bold text-white background-color-AB131C">
+          ➕ إضافة فئة
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- جدول عرض الفئات -->
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered text-center align-middle m-0">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>اسم الفئة</th>
+          <th>تعديل</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <!-- تعديل فئة -->
+          <form method="POST">
+            <input type="hidden" name="edit_category_id" value="{{ cat.id }}">
+            <td>
+              <input name="edit_category_name" value="{{ cat.name }}"
+                class="form-control text-center rounded-3 border border-1" required>
+            </td>
+            <td>
+              <button name="action" value="edit_category"
+                class="btn btn-sm w-100 rounded-3  no-hover">
+                ✏️ تعديل
+              </button>
+            </td>
+          </form>
+
+          <!-- حذف فئة -->
+          <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف الفئة؟');">
+            <input type="hidden" name="delete_category_id" value="{{ cat.id }}">
+            <td>
+              <button name="action" value="delete_category"
+                class="btn btn-sm w-100 rounded-3  no-hover">
+                🗑️ حذف
+              </button>
+            </td>
+          </form>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-muted">لا توجد فئات مضافة بعد.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- سكربت عرض الفلاش كـ Toast -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      const flashContainer = document.getElementById('flash-message');
+      {% for message in messages %}
+        const toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-bg-success border-0 show mb-2 shadow rounded-3';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">{{ message }}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        `;
+        flashContainer.appendChild(toast);
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.remove();
+        }, 3000);
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+});
+</script>

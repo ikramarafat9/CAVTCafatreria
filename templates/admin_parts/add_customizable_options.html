@@ -1,0 +1,89 @@
+<section class="container mb-5">
+  <h4 class="color-AB131C fw-bold mb-4">إضافة خيارات للمكونات القابلة للتخصيص</h4>
+<form method="POST" class="bg-white border border-2 rounded-4 shadow-sm p-4 mb-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <select name="customizable_id_for_option" class="form-control rounded-3 border border-1" required>
+        <option disabled selected>اختر مكوناً قابلاً للتخصيص</option>
+        {% for ingr in customizables %}
+          <option value="{{ ingr.id }}">{{ ingr.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <input type="text" name="add_option_name" placeholder="اسم الخيار" required
+        class="form-control rounded-3 border border-1">
+    </div>
+    <div class="col-md-3">
+      <input type="number" step="0.01" name="extra_price" placeholder="السعر الإضافي (اختياري)" 
+        class="form-control rounded-3 border border-1">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" name="action" value="add_option"
+        class="btn background-color-AB131C text-white w-100 rounded-3 fw-bold">
+        ➕ إضافة خيار
+      </button>
+    </div>
+  </div>
+</form>
+
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered table-hover text-center align-middle m-0">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>المكون القابل للتخصيص</th>
+          <th>اسم الخيار</th>
+          <th> السعر الاضافي</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for opt in options %}
+          <tr>
+            <td>
+              {% set matched = customizables | selectattr('id', 'equalto', opt.customizable_ingredient_id) | list %}
+              {% if matched|length > 0 %}
+                {{ matched[0].name }}
+              {% else %}
+                مكون غير معروف
+              {% endif %}
+            </td>
+            <td>{{ opt.name }}</td>
+            <td>{{ opt.extra_price }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="2" class="text-muted">لا توجد خيارات مضافة بعد.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        let flashContainer = document.getElementById('flash-message');
+        {% for message in messages %}
+          let toast = document.createElement('div');
+          toast.className = 'toast align-items-center text-bg-success border-0 show mb-2 shadow rounded-3';
+          toast.setAttribute('role', 'alert');
+          toast.setAttribute('aria-live', 'assertive');
+          toast.setAttribute('aria-atomic', 'true');
+          toast.innerHTML = `
+            <div class="d-flex">
+              <div class="toast-body">{{ message }}</div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+          `;
+          flashContainer.appendChild(toast);
+          setTimeout(() => {
+            toast.classList.remove('show');
+            toast.remove();
+          }, 3000);
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  });
+</script>

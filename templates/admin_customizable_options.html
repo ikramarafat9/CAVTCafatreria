@@ -1,0 +1,86 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<div class="container mt-4">
+    <h2 class="text-center text-danger mb-4">{{ pagetitle }}</h2>
+
+    <!-- ✅ رسائل الفلاش -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info text-center">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ✅ نموذج إضافة خيار جديد -->
+    <form method="post" class="border p-3 rounded mb-4 bg-light">
+        <h5>➕ إضافة خيار جديد</h5>
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" name="add_name" placeholder="اسم الخيار" required class="form-control mb-2">
+            </div>
+            <div class="col-md-3">
+                <input type="number" step="0.01" name="add_extra_price" placeholder="سعر إضافي (اختياري)" class="form-control mb-2" min="0">
+            </div>
+            <div class="col-md-4">
+                <select name="add_ingredient_id" class="form-control mb-2" required>
+                    <option disabled selected>اختر المكون القابل للتخصيص</option>
+                    {% for ing in ingredients %}
+                        <option value="{{ ing.id }}">{{ ing.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">➕ إضافة</button>
+    </form>
+
+    <!-- ✅ جدول الخيارات -->
+    <table class="table table-bordered table-hover text-center">
+        <thead class="table-danger">
+            <tr>
+                <th>الاسم</th>
+                <th>سعر الإضافة</th>
+                <th>المكون المرتبط</th>
+                <th>تعديل</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for option in options %}
+            <tr>
+                <form method="post">
+                    <input type="hidden" name="edit_id" value="{{ option.id }}">
+                    <td>
+                        <input type="text" name="edit_name" value="{{ option.name }}" class="form-control" required>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" name="edit_extra_price" value="{{ option.extra_price }}" class="form-control" min="0">
+                    </td>
+                    <td>
+                        <select name="edit_ingredient_id" class="form-control" required>
+                            {% for ing in ingredients %}
+                                <option value="{{ ing.id }}" {% if ing.id == option.customizable_ingredient_id %}selected{% endif %}>{{ ing.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success">✏️ تعديل</button>
+                    </td>
+                </form>
+                <form method="post" onsubmit="return confirm('هل أنت متأكد من الحذف؟');">
+                    <input type="hidden" name="delete_id" value="{{ option.id }}">
+                    <td>
+                        <button type="submit" class="btn btn-danger">🗑️ حذف</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- ✅ زر الرجوع إلى القائمة -->
+    {% include 'back_button.html' %}
+</div>
+{% endblock %}

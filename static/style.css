@@ -1,0 +1,215 @@
+body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+  
+    }
+
+button :hover,
+button :focus,
+button :active 
+{
+border: none !important;
+}
+
+input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+input:focus {
+
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+.background-color-f0f0f0 {
+    background-color: #f0f0f0 !important;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes scaleUp {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.card {
+    animation: fadeIn 0.8s ease-in-out;
+}
+.background-color-AB131C{
+    background-color: #AB131C !important;
+}
+
+.max-width360px{
+    max-width:360px ;
+}
+button:hover {
+    background-color: #8F1017 !important;
+    color: #CF8E9A !important;
+}
+ a:hover {
+
+    color: #CF8E9A !important;
+}
+.fons-size14px{
+    font-size: 14px;
+}
+.color-AB131C{
+    color: #AB131C;
+}
+.dropdown-toggle::after {
+    content: none;
+}
+.dropdown-item:focus, .dropdown-item:hover{
+    background: none !important;
+}
+.bottom-20px{
+    bottom: 20px;
+}
+.background-color-f0f0f0ba{
+          background-color:#f0f0f0ba !important;
+
+}
+.service-card {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+.service-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+.width-50px{
+    width: 50px;
+}
+.emoji-hover {
+    font-size: 30px;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.service-card:hover .emoji-hover {
+    opacity: 1;
+}
+.fons-size14px {
+    font-size: 14px;
+}
+
+    .max-width700px {
+    max-width: 700px;
+}
+.note-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.note-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+.width-300px{
+    width: 300px;
+}
+.width-70px{
+    width: 70px;
+}
+.height-70px{
+    height: 70px;
+}
+.height-300px{
+    height: 300px;
+}
+.item-image {
+        width: 220px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+    textarea {
+        resize: none;
+        font-size: 0.9rem;
+    }
+
+.delete-button {
+    background: none;
+    border: none;
+}
+body .delete-button :hover{
+font-weight: bold !important;
+text-decoration: underline !important;
+background: none !important;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  display: none;
+  z-index: 9999;
+}
+h-20{
+    height: 20%;
+}
+
+.no-hover {
+    
+    color: #AB131C !important;
+}
+
+.no-hover:hover,
+.no-hover:focus,
+.no-hover:active {
+  background: none !important;
+  color: #AB131C !important;
+  box-shadow: none !important;
+  outline: none !important;
+  font-weight: bold;
+border: none !important;
+}
+
+.background-color-414141{
+    background-color: #414141;
+}
+.color-AB131C-hover {
+    color: black !important;
+}
+ .color-AB131C-hover:hover , 
+.color-AB131C-hover:focus,
+.color-AB131C-hover:active
+{
+    color: #AB131C !important ;
+    background: none !important;
+    outline: none !important;
+    font-weight: bold;
+    border: none !important;
+    box-shadow: none !important;
+
+
+}
+
+.w-29{
+        width: 29% !important;
+}
+
+.max-width-555px{
+    max-width: 555px;
+}
+
+
+
+
+
+
+
+

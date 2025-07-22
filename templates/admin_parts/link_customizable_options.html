@@ -1,0 +1,138 @@
+<section class="container mb-5 position-relative">
+  <h4 class="color-AB131C fw-bold mb-4">🔗 ربط خيارات المكونات القابلة للتخصيص مع الأصناف</h4>
+
+  <!-- مكان ظهور رسالة الفلاش كـ Toast -->
+  <div id="flash-message" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+
+  <!-- نموذج الربط -->
+  <form id="customLinkForm" method="POST" class="border border-2 rounded-4 bg-light p-4 mb-3">
+    <div class="row align-items-center">
+      <div class="col-md-4 mb-3">
+        <select id="customItemSelect" name="link_custom_item_id" required class="form-control rounded-3 border border-1">
+          <option disabled selected value="">اختر صنف للربط</option>
+          {% for item in items %}
+            <option value="{{ item.id }}">{{ item.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-8 mb-3" style="max-height: 200px; overflow-y: auto;">
+        <div class="bg-white border border-1 rounded-3 p-3 shadow-sm">
+          {% for option in options %}
+            {% set matching_customizables = customizables | selectattr('id', 'equalto', option.customizable_ingredient_id) | list %}
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" name="customizable_option_ids" value="{{ option.id }}" id="opt{{ option.id }}">
+              <label class="form-check-label" for="opt{{ option.id }}">
+                {{ option.name }}
+                {% if matching_customizables|length > 0 %}
+                  ({{ matching_customizables[0].name }})
+                {% else %}
+                  (مكون غير معروف)
+                {% endif %}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <button type="submit" name="action" value="link_custom" class="btn background-color-AB131C text-white fw-bold w-100 rounded-3">
+      🔗 ربط الخيارات بالصنف
+    </button>
+  </form>
+
+  <!-- عرض روابط الخيارات مع الأصناف -->
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered text-center align-middle m-0">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>الصنف</th>
+          <th>الخيار المرتبط</th>
+          <th>إلغاء الربط</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for link in item_custom_links %}
+        <tr>
+          <td>{{ link.item_name }}</td>
+          <td>{{ link.option_name }}</td>
+          <td>
+            <form method="POST" onsubmit="return confirm('هل أنت متأكد من إلغاء الربط؟');" style="display:inline;">
+              <input type="hidden" name="unlink_custom_item_id" value="{{ link.item_id }}">
+              <input type="hidden" name="unlink_custom_option_id" value="{{ link.option_id }}">
+              <button name="action" value="unlink_custom" class="btn no-hover btn-sm  px-3">الغاء</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="text-muted">لا توجد روابط مضافة بعد.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- سكربت عرض رسائل الفلاش كـ Toast + التحقق من الحقول -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // عرض رسائل الفلاش من السيرفر
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      let flashContainer = document.getElementById('flash-message');
+      {% for message in messages %}
+        let toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-bg-success border-0 show mb-2 shadow rounded-3';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">{{ message }}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        `;
+        flashContainer.appendChild(toast);
+        setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3000);
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  // التحقق من اختيار صنف وخيار قبل الإرسال
+  const form = document.getElementById("customLinkForm");
+  const itemSelect = document.getElementById("customItemSelect");
+
+  form.addEventListener("submit", function(e) {
+    if (!itemSelect.value) {
+      e.preventDefault();
+      showFlash("يرجى اختيار صنف للربط", "danger");
+      return;
+    }
+
+    const checkboxes = form.querySelectorAll('input[name="customizable_option_ids"]:checked');
+    if (checkboxes.length === 0) {
+      e.preventDefault();
+      showFlash("يرجى اختيار خيار واحد على الأقل", "danger");
+      return;
+    }
+  });
+
+  // دالة عرض التوست
+  function showFlash(message, type = "success") {
+    const flashContainer = document.getElementById('flash-message');
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show mb-2 shadow rounded-3`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    toast.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    `;
+    flashContainer.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.remove();
+    }, 3000);
+  }
+});
+</script>

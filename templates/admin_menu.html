@@ -1,0 +1,69 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('manage_categories') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/category_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">إدارة الفئات</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('manage_items') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/item_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">إدارة الأصناف</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('manage_fixed_ingredients') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/fixed_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">المكونات الثابتة</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('link_fixed_ingredients') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/link_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">ربط المكونات الثابتة بالأصناف</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('manage_customizable_ingredients') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/custom_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">المكونات المتغيرة</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('manage_customizable_options') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/options_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">ربط الخيارات مع المكونات المتغيرة</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('link_custom_options') }}" class="text-decoration-none">
+                <div class="card p-3 shadow-lg text-center bg-light">
+                    <img src="{{ url_for('static', filename='image/link_icon.png') }}" class="img-fluid mb-3" alt="">
+                    <h5 class="fw-bold text-dark">ربط المكونات المخصصة مع الأصناف</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

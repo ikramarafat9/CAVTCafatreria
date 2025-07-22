@@ -1,0 +1,62 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+
+<div class="container py-5 d-flex">
+  <section class="intro mb-5 col-md-4">
+    <h2 class="section-title text-center mb-4">حول التطبيق</h2>
+    <p class="intro-text">
+      <strong>مرحباً بكم في تطبيقنا</strong><br><br>
+      يسعدنا أن نقدم لكم هذه النسخة التجريبية من تطبيق الكافتيريا الخاص بكلية التدريب المهني المتقدم - إناث إربد، والذي يهدف إلى تسهيل عملية الطلبات بين المتدربين والهيئة العاملة في الكلية والكافتيريا بشكل رقمي ومرن. تم تصميم هذا التطبيق كخطوة أولى نحو تطوير حلول تقنية تدعم بيئة الكلية وتسهم في تحسين تجربة المستخدم، وقد تم تطويره بأيدي متدربين برنامج مطور التطبيقات المتقدمة.
+    </p>
+    <p class="intro-text">
+      نود أن نلفت انتباهكم إلى أن هذه النسخة ما زالت قيد التطوير، وقد تظهر بعض المشكلات أو الأخطاء أثناء الاستخدام، وهذا أمر طبيعي في المرحلة التجريبية. نعمل بشكل مستمر على تحسين الأداء وإضافة مزايا جديدة بناءً على ملاحظاتكم وتجربتكم.<br><br>
+      كما نحيطكم علماً بأن هذا التطبيق تم إنجازه خلال فترة زمنية قصيرة أثناء الدورة التدريبية، وذلك في إطار العمل الجماعي والتدريب العملي للمتدربين.<br><br>
+      نرحب بجميع تعليقاتكم واقتراحاتكم لتطوير التطبيق وجعله أكثر فاعلية وفائدة. يمكنكم مشاركتنا بأي أفكار أو ملاحظات من خلال التواصل معنا مباشرة.
+    </p>
+    <p class="intro-text">
+      ونود أن نشارككم رؤيتنا المستقبلية، حيث نخطط لتوسيع هذا التطبيق وتحويله إلى منصة شاملة يمكن استخدامها في إدارة الامتحانات والاختبارات الإلكترونية، وربما ربطه لاحقاً بأنظمة إدارة الصفوف والحضور والغياب.<br><br>
+      شكراً لاستخدامكم التطبيق، ونتمنى لكم تجربة ممتعة ومفيدة.
+    </p>
+  </section>
+
+  <section class="AppDev col-md-8">
+    <h2 class="section-title text-center mb-4">فريق العمل</h2>
+    <div class="row g-4 justify-content-center">
+      {% set members = [
+        {'name': 'Eng. Asmaa Shtayat', 'role': 'Supervisor(Application development Trainer)', 'img': 'ourImage/EngAsmaa.jpeg'},
+        {'name': 'Majd Almomani', 'role': 'Back-End Developer', 'img': 'ourImage/Majd.jpeg'},
+        {'name': 'Eng.Ikram Arafat', 'role': 'Team Leader / Full-Stack Developer', 'img': 'ourImage/Ikram.jpeg'},
+        {'name': 'Eng.Wasan Alkaraswah', 'role': 'Back-End Developer', 'img': 'ourImage/Wasan.jpeg'},
+        {'name': 'Noor Ez Aldeen', 'role': 'Designer / Back-End Developer ', 'img': 'ourImage/Noor2.jpeg'},
+        {'name': 'Mohammad Hijazi', 'role': 'Database Developer', 'img': 'ourImage/hijazi.jpeg'},
+        {'name': 'Amnah Taha', 'role': 'Front-End Developer', 'img': 'ourImage/Amnah.jpg'},
+        {'name': 'Noor Abodayyeh', 'role': 'Photographer / Designer', 'img': 'ourImage/Noor1.jpeg'},
+        {'name': 'Weam Mansi', 'role': 'Business Analysis', 'img': 'ourImage/Weam.jpg'},
+        {'name': 'Esraa Abu-Sahyoun', 'role': 'Business Analysis', 'img': 'ourImage/Esraa.jpg'},
+        {'name': 'Adil Alhaj Ali', 'role': 'Business Analysis', 'img': 'ourImage/Adil.jpg'},
+        {'name': 'Toqa Rababah', 'role': 'Business Analysis', 'img': 'ourImage/Toqa.jpg'},
+
+
+      ] %}
+
+      {% for member in members %}
+        <div class="col-md-6 col-lg-6">
+          <div class="card {% if loop.index0 == 0 %}special-card{% endif %} h-100 text-center">
+            <div class="img p-3">
+              <img src="{{ url_for('static', filename=member.img) }}" class="card-img-top rounded-circle mx-auto" alt="{{ member.name }}" style="width: 150px; height: 150px; object-fit: cover;">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title name">{{ member.name }}</h5>
+              <p class="card-text role">{{ member.role }}</p>
+            </div>
+          </div>
+        </div>
+        {% if loop.index0 == 0 %}
+          <div class="w-100 d-none d-md-block"></div>  {# سطر جديد بعد أول بطاقة لو احتجت #}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

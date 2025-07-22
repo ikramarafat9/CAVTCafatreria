@@ -1,0 +1,71 @@
+{% extends 'navbar.html' %}
+{% block body %}
+<div class="container mt-5">
+  <div class="row g-4">
+
+  
+    <!-- إدارة قائمة الطعام -->
+    <div class="col-md-4">
+      <a href="{{ url_for('admin_manage_menu') }}" class="text-decoration-none">
+        <div class="card text-center shadow-lg p-4 bg-light hover-card">
+          <h5 class="text-dark fw-bold">إدارة قائمة الطعام</h5>
+        </div>
+      </a>
+    </div>
+
+    <!-- الطلبات -->
+    <div class="col-md-4">
+      <a href="/kitchen" class="text-decoration-none">
+        <div class="card text-center shadow-lg p-4 bg-light hover-card">
+          <h5 class="text-dark fw-bold mt-2">الطلبات</h5>
+        </div>
+      </a>
+    </div>
+
+    <!-- مشاهدة المنيو -->
+    <div class="col-md-4">
+      <a href="/menu" class="text-decoration-none">
+        <div class="card text-center shadow-lg p-4 bg-light hover-card">
+          <h5 class="text-dark fw-bold mt-2">مشاهدة قائمة الطعام </h5>
+        </div>
+      </a>
+    </div>
+
+    <!-- عرض التعليقات -->
+    <div class="col-md-4">
+      <a href="/Showfeedbacks" class="text-decoration-none">
+        <div class="card text-center shadow-lg p-4 bg-light hover-card">
+          <h5 class="text-dark fw-bold mt-2">عرض التعليقات</h5>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="/account" class="text-decoration-none">
+        <div class="card text-center shadow-lg p-4 bg-light hover-card">
+          <h5 class="text-dark fw-bold mt-2">حسابك</h5>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  .hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 20px;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background-color: #f8f9fa !important;
+  }
+
+  .hover-card:hover  {
+    transform: scale(1.1);
+  }
+
+</style>
+{% endblock %}

@@ -1,0 +1,76 @@
+<!-- إدارة المكونات القابلة للتخصيص -->
+<section class="mb-5 position-relative">
+  <h4 class="text-danger">المكونات القابلة للتخصيص</h4>
+
+  <!-- مكان ظهور رسائل الفلاش كـ Toast -->
+  <div id="flash-message" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+
+  <!-- نموذج إضافة مكون قابل للتخصيص -->
+  <form method="POST" class="border p-3 rounded bg-light mb-4">
+    <div class="row">
+      <div class="col-md-8">
+        <input type="text" name="add_customizable_name" placeholder="اسم المكون القابل للتخصيص" required class="form-control">
+      </div>
+      <div class="col-md-4">
+        <button type="submit" name="action" value="add_customizable" class="btn btn-primary w-100">➕ إضافة مكون</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- جدول عرض وتعديل/حذف المكونات القابلة للتخصيص -->
+  <table class="table table-bordered table-hover text-center">
+    <thead class="table-danger">
+      <tr><th>الاسم</th><th>تعديل</th><th>حذف</th></tr>
+    </thead>
+    <tbody>
+      {% for ingr in customizables %}
+      <tr>
+        <!-- نموذج تعديل مكون -->
+        <form method="POST" class="d-inline-block">
+          <input type="hidden" name="edit_customizable_id" value="{{ ingr.id }}">
+          <td><input name="edit_customizable_name" value="{{ ingr.name }}" class="form-control" required></td>
+          <td><button name="action" value="edit_customizable" class="btn btn-success btn-sm">✏️ تعديل</button></td>
+        </form>
+
+        <!-- نموذج حذف مكون -->
+        <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف المكون؟');" class="d-inline-block">
+          <input type="hidden" name="delete_customizable_id" value="{{ ingr.id }}">
+          <td><button name="action" value="delete_customizable" class="btn btn-danger btn-sm">🗑️ حذف</button></td>
+        </form>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">لا توجد مكونات قابلة للتخصيص مضافة بعد.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<!-- سكربت عرض رسائل الفلاش كـ Toast -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      let flashContainer = document.getElementById('flash-message');
+      {% for message in messages %}
+        let toastEl = document.createElement('div');
+        toastEl.className = 'toast align-items-center text-bg-success border-0 mb-2 shadow';
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">
+              {{ message|e('js') }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        `;
+        flashContainer.appendChild(toastEl);
+
+        let toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        toast.show();
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+});
+</script>

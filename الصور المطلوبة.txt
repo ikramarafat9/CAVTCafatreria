@@ -1,0 +1,41 @@
+وتم استخدام صور مكانية وهمية ضمن مجلد static/image/ مثل:
+
+category_icon.png
+
+item_icon.png
+
+fixed_icon.png
+
+custom_icon.png
+
+link_icon.png
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE "Role" (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE CHECK(name IN ('مدير', 'موظف', 'طالب', 'صاحب الكافتيريا'))
+)
+
+
+CREATE TABLE "User" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	"specialty"	TEXT NOT NULL CHECK("specialty" IN ('مهارات إنتاج المخبوزات والحلويات والمعجنات', 'صانع حلويات شرقية', 'صانع حلويات غربية', 'صانع معجنات', 'حلاق شعر نسائي / كوافيرة أو كوافير', 'مساعد حلاق نسائي','مدير', 'مساعد تجميل', 'مختص مكياج', 'منسق إداري طبي', 'حاضنة أطفال', 'خياط ملابس نسائية', 'مشغل / آلة درزة صناعية', 'مدخل بيانات', 'مطور التطبيقات المتقدمة', 'تكنولوجيا إدارة النظم والشبكات', 'صيانة أنظمة ومعدات تقنية المعلومات', 'تكنولوجيا الرسم الهندسي وتطبيقاته')),
+	"password"	TEXT NOT NULL,
+	"phone_number"	TEXT NOT NULL CHECK(length("phone_number") = 10),
+	"role_id"	INTEGER NOT NULL DEFAULT 3,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("role_id") REFERENCES "Role"("id") ON DELETE CASCADE
+)

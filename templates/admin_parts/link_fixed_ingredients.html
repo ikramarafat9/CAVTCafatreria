@@ -1,0 +1,133 @@
+<!-- ربط المكونات الثابتة مع الأصناف -->
+<section class="container mb-5">
+  <h4 class="color-AB131C fw-bold mb-4">🔗 ربط المكونات الثابتة مع الأصناف</h4>
+
+  <!-- مكان ظهور رسالة الفلاش كـ Toast -->
+  <div id="flash-message" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+
+  <!-- نموذج الربط -->
+  <form method="POST" class="bg-white border border-2 rounded-4 shadow-sm p-4 mb-4">
+    <div class="row align-items-center g-3">
+      <div class="col-md-4">
+        <select id="itemSelect" name="link_fixed_item_id" class="form-control rounded-3 border border-1" required>
+  <option disabled selected value="">اختر الصنف</option>
+  {% for item in items %}
+    <option value="{{ item.id }}">{{ item.name }}</option>
+  {% endfor %}
+</select>
+
+      </div>
+      <div class="col-md-6">
+        <label class="fw-semibold mb-2 d-block">اختر المكونات:</label>
+        <div class="d-flex flex-wrap gap-3">
+          {% for fixed in fixed_ingredients %}
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="fixed_ingredient_ids" value="{{ fixed.id }}" id="fixed{{ fixed.id }}" >
+              <label class="form-check-label" for="fixed{{ fixed.id }}">{{ fixed.name }}</label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" name="action" value="link_fixed" class="btn background-color-AB131C text-white w-100 rounded-3 fw-bold">
+          🔗 ربط
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- عرض الروابط الحالية -->
+  <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+    <table class="table table-bordered text-center align-middle m-0">
+      <thead class="background-color-AB131C text-white">
+        <tr>
+          <th>اسم الصنف</th>
+          <th>المكون الثابت</th>
+          <th>إلغاء الربط</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for link in item_fixed_links %}
+        <tr>
+          <td>{{ link.item_name }}</td>
+          <td>{{ link.ing_name }}</td>
+          <td>
+            <form method="POST" onsubmit="return confirm('تأكيد إلغاء الربط؟');" style="display:inline;">
+              <input type="hidden" name="unlink_fixed_item_id" value="{{ link.item_id }}">
+              <input type="hidden" name="unlink_fixed_ing_id" value="{{ link.ing_id }}">
+              <button type="submit" name="action" value="unlink_fixed" class="btn no-hover btn-sm rounded-3">
+                 إلغاء
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-muted">لا توجد روابط مضافة بعد.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- سكربت عرض رسائل الفلاش كـ Toast بدون رفع الصفحة -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      let flashContainer = document.getElementById('flash-message');
+      {% for message in messages %}
+        let toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-bg-success border-0 show mb-2 shadow rounded-3';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">{{ message }}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        `;
+        flashContainer.appendChild(toast);
+        setTimeout(() => { toast.classList.remove('show'); toast.remove(); }, 3000);
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // كود الفلاش توست موجود مسبقًا، بنضيف عليه هذا:
+
+  // الوصول للنموذج
+  const form = document.querySelector('form');
+  const itemSelect = document.getElementById('itemSelect');
+
+  form.addEventListener('submit', function (e) {
+    // إذا ما تم اختيار صنف، امنعي الإرسال
+    if (!itemSelect.value) {
+      e.preventDefault();
+      // عرض رسالة فلاش
+      const flashContainer = document.getElementById('flash-message');
+      let toast = document.createElement('div');
+      toast.className = 'toast align-items-center text-bg-danger border-0 show mb-2 shadow rounded-3';
+      toast.setAttribute('role', 'alert');
+      toast.setAttribute('aria-live', 'assertive');
+      toast.setAttribute('aria-atomic', 'true');
+      toast.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">يرجى اختيار صنف قبل تنفيذ عملية الربط.</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      `;
+      flashContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.remove();
+      }, 3000);
+    }
+  });
+});
+</script>
+

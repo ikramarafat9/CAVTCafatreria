@@ -1,0 +1,90 @@
+{% extends 'navbar.html' %}
+{% block body %}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4 max-width-555px w-100 rounded-4">
+    <div class="text-center mb-3">
+      <img src="{{ url_for('static', filename='image/CAVT_logo.svg') }}" alt="شعار الكلية" class="rounded" width="140">
+    </div>
+
+    <h5 class="text-center mb-4">تفاصيل طلبك</h5>
+
+    <div class="mb-3">
+      <strong>رقم الطلب:</strong> {{ order['id'] }}<br>
+      <strong>وقت الطلب:</strong> {{ order['order_time'] }}<br>
+      <strong>الحالة:</strong> {{ order['status'] }}
+    </div>
+
+    <div class="mb-3">
+      <h6>الأصناف:</h6>
+      <ul class="list-group">
+        {% for item in order_items %}
+        <li class="list-group-item d-flex flex-column">
+          <div><strong>{{ item.item_name }}</strong></div>
+          <div class="small text-muted">الكمية: {{ item.quantity }} | السعر الأساسي: {{ item.base_price }} د.أ | الإضافي: {{ item.extra_price }} د.أ</div>
+          {% if item.fixed_ingredients or item.custom_options or item.notes %}
+            <div class="small mt-1">
+              {% if item.fixed_ingredients %}<div>مكونات ثابتة: {{ item.fixed_ingredients|join(', ') }}</div>{% endif %}
+              {% if item.custom_options %}<div>إضافات: {{ item.custom_options|join(', ') }}</div>{% endif %}
+              {% if item.notes %}<div>ملاحظات: {{ item.notes }}</div>{% endif %}
+            </div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mb-3 text-end">
+      <strong>المجموع الكلي: {{ total }} د.أ</strong>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alertl alert-success text-center fw-bold fs-5">
+        {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div id="student_notifications" class="mb-3">
+        <!-- يتم إدخال التنبيه هنا -->
+    </div>
+    <div class="text-center mt-3">
+         {% if session.get('user_id') and (session.get('role_id') != 1 )%}
+        <a href="/home" class="text-decoration-none fons-size14px" style="color: #AB131C; font-weight: bold;">
+            العودة إلى الرئيسية
+        </a>
+      {% endif %}  
+    {% if session.get('user_id') and (session.get('role_id') == 1 )%}
+        <a href="/admin" class="text-decoration-none fons-size14px" style="color: #AB131C; font-weight: bold;">
+            العودة إلى الرئيسية
+        </a>
+    {% endif %}
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    const socket = io();
+
+    const userId = {{ session.get('user_id') | tojson }};
+    socket.emit("join", { user_id: userId });
+
+    socket.on("order_status", function(data) {
+        const message = data.message;
+
+        const notifDiv = document.createElement("div");
+        notifDiv.className = "alert alert-success mt-3";
+        notifDiv.innerText = message;
+
+        // ضيف التنبيه لواجهة المستخدم
+        const container = document.getElementById("student_notifications");
+        container.prepend(notifDiv);
+    });
+</script>
+
+{% endblock %}

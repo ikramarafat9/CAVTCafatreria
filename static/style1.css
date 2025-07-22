@@ -1,0 +1,129 @@
+/* Main Container */
+.main {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+        justify-content: space-between;
+}
+
+/* Intro Section */
+.intro {
+     max-width: 712px;
+         margin: 55px;
+}
+
+.section-title {
+  text-align: center;
+  color: #AB131C;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.intro-text {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Team Section */
+.AppDev {
+    width: 100%;
+    max-width: 600px;
+        margin: 55px;
+}
+
+.workTeam {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+/* Card Design */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.img img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.info {
+  text-align: center;
+}
+
+.name {
+  color: #AB131C;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.role {
+  color: #666;
+  font-size: 16px;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 24px;
+  }
+
+  .intro-text {
+    font-size: 14px;
+    padding: 15px;
+  }
+
+  .name {
+    font-size: 16px;
+  }
+
+  .role {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 20px;
+  }
+
+  .intro-text {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .img img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.special-card {
+
+}

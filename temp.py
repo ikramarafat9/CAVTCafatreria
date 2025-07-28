@@ -930,7 +930,7 @@ def track_latest_order():
     latest_order = conn.execute('''
         SELECT id
         FROM orders
-        WHERE user_id = ? AND status = 'confirmed'
+        WHERE user_id = ? 
         ORDER BY order_time DESC
         LIMIT 1
     ''', (user_id,)).fetchone()

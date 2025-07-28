@@ -4,29 +4,6 @@
 
 <div class="container py-5 d-flex">
 
-  <section class="intro mb-5 col-md-4">
-    <h2 class="section-title text-center mb-4">حول التطبيق</h2>
-
- <video autoplay muted loop class="w-100 h-100 show-on-mobile" style="display: none;">
-    <source src="../static/image/CAVT_Video.mp4" type="video/mp4" />
-    المتصفح لا يدعم عرض الفيديو.
-  </video>
-
-
-    <p class="intro-text">
-      <strong>مرحباً بكم في تطبيقنا</strong><br><br>
-      يسعدنا أن نقدم لكم هذه النسخة التجريبية من تطبيق الكافتيريا الخاص بكلية التدريب المهني المتقدم - إناث إربد، والذي يهدف إلى تسهيل عملية الطلبات بين المتدربين والهيئة العاملة في الكلية والكافتيريا بشكل رقمي ومرن. تم تصميم هذا التطبيق كخطوة أولى نحو تطوير حلول تقنية تدعم بيئة الكلية وتسهم في تحسين تجربة المستخدم، وقد تم تطويره بأيدي متدربين برنامج مطور التطبيقات المتقدمة.
-    </p>
-    <p class="intro-text">
-      نود أن نلفت انتباهكم إلى أن هذه النسخة ما زالت قيد التطوير، وقد تظهر بعض المشكلات أو الأخطاء أثناء الاستخدام، وهذا أمر طبيعي في المرحلة التجريبية. نعمل بشكل مستمر على تحسين الأداء وإضافة مزايا جديدة بناءً على ملاحظاتكم وتجربتكم.<br><br>
-      كما نحيطكم علماً بأن هذا التطبيق تم إنجازه خلال فترة زمنية قصيرة أثناء الدورة التدريبية، وذلك في إطار العمل الجماعي والتدريب العملي للمتدربين.<br><br>
-      نرحب بجميع تعليقاتكم واقتراحاتكم لتطوير التطبيق وجعله أكثر فاعلية وفائدة. يمكنكم مشاركتنا بأي أفكار أو ملاحظات من خلال التواصل معنا مباشرة.
-    </p>
-    <p class="intro-text">
-      ونود أن نشارككم رؤيتنا المستقبلية، حيث نخطط لتوسيع هذا التطبيق وتحويله إلى منصة شاملة يمكن استخدامها في إدارة الامتحانات والاختبارات الإلكترونية، وربما ربطه لاحقاً بأنظمة إدارة الصفوف والحضور والغياب.<br><br>
-      شكراً لاستخدامكم التطبيق، ونتمنى لكم تجربة ممتعة ومفيدة.
-    </p>
-  </section>
 
   <section class="AppDev col-md-8">
     <h2 class="section-title text-center mb-4">فريق العمل</h2>
@@ -34,17 +11,16 @@
       {% set members = [
         {'name': 'Eng. Asmaa Shtayat', 'role': 'Supervisor(Application development Trainer)', 'img': 'ourImage/EngAsmaa.jpeg'},
         {'name': 'Eng.Ikram Arafat', 'role': 'Team Leader / Full-Stack Developer', 'img': 'ourImage/Ikram.jpeg'},
-        {'name': 'Majd Almomani', 'role': 'Back-End Developer', 'img': 'ourImage/Majd.jpeg'},
-        {'name': 'Eng.Wasan Alkaraswah', 'role': 'Back-End Developer', 'img': 'ourImage/Wasan.jpeg'},
-        {'name': 'Noor Ez Aldeen', 'role': 'Designer / Back-End Developer ', 'img': 'ourImage/Noor2.jpeg'},
-        {'name': 'Mohammad Hijazi', 'role': 'Database Developer', 'img': 'ourImage/hijazi.jpeg'},
-        {'name': 'Amnah Taha', 'role': 'Front-End Developer', 'img': 'ourImage/Amnah.jpg'},
+        {'name': 'Eng.Wasan Alkaraswah', 'role': 'Full-Stack Developer / Creative Developer', 'img': 'ourImage/Wasan.jpeg'},
         {'name': 'Noor Abodayyeh', 'role': 'Photographer / Designer', 'img': 'ourImage/Noor1.jpeg'},
+        {'name': 'Mohammad Hijazi', 'role': 'Database Developer', 'img': 'ourImage/hijazi.jpeg'},
+        {'name': 'Majd Almomani', 'role': 'Back-End Developer', 'img': 'ourImage/Majd.jpeg'},
+        {'name': 'Noor Ez Aldeen', 'role': 'Full-Stack Developer', 'img': 'ourImage/Noor2.jpeg'},
+        {'name': 'Amnah Taha', 'role': 'Front-End Developer', 'img': 'ourImage/Amnah.jpg'},
         {'name': 'Weam Mansi', 'role': 'Business Analysis', 'img': 'ourImage/Weam.jpg'},
         {'name': 'Esraa Abu-Sahyoun', 'role': 'Business Analysis', 'img': 'ourImage/Esraa.jpg'},
         {'name': 'Adil Alhaj Ali', 'role': 'Business Analysis', 'img': 'ourImage/Adil.jpg'},
         {'name': 'Toqa Rababah', 'role': 'Business Analysis', 'img': 'ourImage/Toqa.jpg'},
-
 
       ] %}
 
@@ -66,5 +42,46 @@
       {% endfor %}
     </div>
   </section>
+  <section class="intro mb-5 col-md-4">
+    <h2 class="section-title text-center mb-4">حول التطبيق</h2>
+
+    <div id="mobile-video-container"></div>
+
+    <p class="intro-text">
+      <strong>مرحباً بكم في تطبيقنا</strong><br><br>
+      يسعدنا أن نقدم لكم هذه النسخة التجريبية من تطبيق الكافتيريا الخاص بكلية التدريب المهني المتقدم - إناث إربد، والذي يهدف إلى تسهيل عملية الطلبات بين المتدربين والهيئة العاملة في الكلية والكافتيريا بشكل رقمي ومرن. تم تصميم هذا التطبيق كخطوة أولى نحو تطوير حلول تقنية تدعم بيئة الكلية وتسهم في تحسين تجربة المستخدم، وقد تم تطويره بأيدي متدربين برنامج مطور التطبيقات المتقدمة.
+    </p>
+    <p class="intro-text">
+      نود أن نلفت انتباهكم إلى أن هذه النسخة ما زالت قيد التطوير، وقد تظهر بعض المشكلات أو الأخطاء أثناء الاستخدام، وهذا أمر طبيعي في المرحلة التجريبية. نعمل بشكل مستمر على تحسين الأداء وإضافة مزايا جديدة بناءً على ملاحظاتكم وتجربتكم.<br><br>
+      كما نحيطكم علماً بأن هذا التطبيق تم إنجازه خلال فترة زمنية قصيرة أثناء الدورة التدريبية، وذلك في إطار العمل الجماعي والتدريب العملي للمتدربين.<br><br>
+      نرحب بجميع تعليقاتكم واقتراحاتكم لتطوير التطبيق وجعله أكثر فاعلية وفائدة. يمكنكم مشاركتنا بأي أفكار أو ملاحظات من خلال التواصل معنا مباشرة.
+    </p>
+    <p class="intro-text">
+      ونود أن نشارككم رؤيتنا المستقبلية، حيث نخطط لتوسيع هذا التطبيق وتحويله إلى منصة شاملة يمكن استخدامها في إدارة الامتحانات والاختبارات الإلكترونية، وربما ربطه لاحقاً بأنظمة إدارة الصفوف والحضور والغياب.<br><br>
+      شكراً لاستخدامكم التطبيق، ونتمنى لكم تجربة ممتعة ومفيدة.
+    </p>
+  </section>
 </div>
+
+
+
+<script>
+
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  if (isMobile) {
+    const videoContainer = document.getElementById('mobile-video-container');
+    videoContainer.innerHTML = `
+      <video autoplay loop playsinline class="w-100 h-100">
+        <source src="../static/image/CAVT_Video.mp4" type="video/mp4" />
+        المتصفح لا يدعم عرض الفيديو.
+      </video>
+    `;
+  }
+</script>
+
+
+
+
+
 {% endblock %}

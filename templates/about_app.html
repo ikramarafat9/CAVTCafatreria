@@ -73,7 +73,7 @@
 if (isMobile) {
   const videoContainer = document.getElementById('mobile-video-container');
   videoContainer.innerHTML = `
-    <video id="mobileVideo" autoplay  loop playsinline class="w-100 h-100" style="cursor: pointer;">
+    <video id="mobileVideo" autoplay muted loop playsinline class="w-100 h-100" style="cursor: pointer;">
       <source src="${ "{{ url_for('static', filename='image/CAVT_Video.mp4') }}" }" type="video/mp4" />
       المتصفح لا يدعم عرض الفيديو.
     </video>

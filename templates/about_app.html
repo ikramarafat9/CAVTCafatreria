@@ -70,16 +70,25 @@
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-  if (isMobile) {
-    const videoContainer = document.getElementById('mobile-video-container');
-    videoContainer.innerHTML = `
-  <video autoplay loop playsinline class="w-100 h-100">
-    <source src="${ "{{ url_for('static', filename='image/CAVT_Video.mp4') }}" }" type="video/mp4" />
-    المتصفح لا يدعم عرض الفيديو.
-  </video>
-`;
+if (isMobile) {
+  const videoContainer = document.getElementById('mobile-video-container');
+  videoContainer.innerHTML = `
+    <video id="mobileVideo" autoplay muted loop playsinline class="w-100 h-100" style="cursor: pointer;">
+      <source src="${ "{{ url_for('static', filename='image/CAVT_Video.mp4') }}" }" type="video/mp4" />
+      المتصفح لا يدعم عرض الفيديو.
+    </video>
+  `;
 
-  }
+  setTimeout(() => {
+    const video = document.getElementById('mobileVideo');
+    video.addEventListener('click', function () {
+      // إلغاء كتم الصوت
+      video.muted = false;
+      video.play();
+    });
+  }, 100); 
+}
+
 </script>
 
 

@@ -6,25 +6,20 @@
     <div class="card shadow p-4 w-100 max-width700px rounded-4 bg-white">
       <div class="text-center mb-4">
       <img src="{{ url_for('static', filename='image/CAVT_logo.svg') }}" alt="شعار الكلية" class="rounded" width="140">
-        <h2 class="mt-3 color-AB131C">جميع الملاحظات</h2>
+        <h2 class="mt-3 color-AB131C">ملاحظات الأسبوع الحالي</h2>
         <hr class="mt-2 mb-4">
       </div>
       <form method="get" class="mb-4 text-center">
-        <label for="month" class="form-label fw-bold"> الشهر:</label>
-        <select name="month" id="month" class="form-select d-inline-block w-auto">
-          <option value="" {% if not selected_month %}selected{% endif %}>الكل </option>
-          <option value="1" {% if selected_month == '1' %}selected{% endif %}>يناير</option>
-          <option value="2" {% if selected_month == '2' %}selected{% endif %}>فبراير</option>
-          <option value="3" {% if selected_month == '3' %}selected{% endif %}>مارس</option>
-          <option value="4" {% if selected_month == '4' %}selected{% endif %}>أبريل</option>
-          <option value="5" {% if selected_month == '5' %}selected{% endif %}>مايو</option>
-          <option value="6" {% if selected_month == '6' %}selected{% endif %}>يونيو</option>
-          <option value="7" {% if selected_month == '7' %}selected{% endif %}>يوليو</option>
-          <option value="8" {% if selected_month == '8' %}selected{% endif %}>أغسطس</option>
-          <option value="9" {% if selected_month == '9' %}selected{% endif %}>سبتمبر</option>
-          <option value="10" {% if selected_month == '10' %}selected{% endif %}>أكتوبر</option>
-          <option value="11" {% if selected_month == '11' %}selected{% endif %}>نوفمبر</option>
-          <option value="12" {% if selected_month == '12' %}selected{% endif %}>ديسمبر</option>
+        <label for="day" class="form-label fw-bold">اليوم:</label>
+        <select name="day" id="day" class="form-select d-inline-block w-auto">
+          <option value="" {% if not selected_day %}selected{% endif %}>كل الأيام</option>
+          <option value="Sunday" {% if selected_day == 'Sunday' %}selected{% endif %}>الأحد</option>
+          <option value="Monday" {% if selected_day == 'Monday' %}selected{% endif %}>الاثنين</option>
+          <option value="Tuesday" {% if selected_day == 'Tuesday' %}selected{% endif %}>الثلاثاء</option>
+          <option value="Wednesday" {% if selected_day == 'Wednesday' %}selected{% endif %}>الأربعاء</option>
+          <option value="Thursday" {% if selected_day == 'Thursday' %}selected{% endif %}>الخميس</option>
+          <option value="Friday" {% if selected_day == 'Friday' %}selected{% endif %}>الجمعة</option>
+          <option value="Saturday" {% if selected_day == 'Saturday' %}selected{% endif %}>السبت</option>
         </select>
         <button type="submit" class="btn background-color-AB131C text-white mb-1 ms-2">فلترة</button>
       </form>
@@ -41,7 +36,7 @@
       </div>
       {% else %}
       <div class="alert alert-secondary text-center" role="alert">
-        لا توجد ملاحظات حتى الآن.
+        لا توجد ملاحظات  .
       </div>
       {% endfor %}
     </div>

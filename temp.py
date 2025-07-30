@@ -12,6 +12,7 @@ import random
 import json
 import pytz
 
+    
 amman = pytz.timezone('Asia/Amman')
 now = datetime.now(amman).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -19,7 +20,7 @@ now = datetime.now(amman).strftime('%Y-%m-%d %H:%M:%S')
 import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = os.path.join("static", "items")  # الأفضل من "static/items"
+UPLOAD_FOLDER = os.path.join("static", "items") 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 #****************
@@ -33,12 +34,32 @@ def delete_old_orders():
     conn.close()
     print("Deleted old orders.")
 
-# جدولة حذف الطلبات يوميًا
+
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=delete_old_orders, trigger="cron", hour=0, minute=0)
 scheduler.start()
 
 
+#****************
+
+
+def delete_old_feedbacks():
+    conn = sqlite3.connect('college_users.db')
+    cursor = conn.cursor()
+
+    # احسب التاريخ قبل 7 أيام
+    seven_days_ago = (datetime.now() - timedelta(days=7)).date().isoformat()
+
+    # حذف الملاحظات الأقدم من 7 أيام
+    cursor.execute("DELETE FROM Feedback WHERE DATE(feedback_date) < ?", (seven_days_ago,))
+    conn.commit()
+    conn.close()
+    print("Deleted old feedbacks.")
+
+# جدولة المهمة: كل أسبوع (مثلاً السبت الساعة 12:00 صباحًا)
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=delete_old_feedbacks, trigger="cron", day_of_week='sat', hour=0, minute=0)
+scheduler.start()
 
 #****************
 
@@ -228,7 +249,7 @@ def admin_manage_menu():
                 image_filename = f"image/{filename}"
                 image.save(os.path.join('static/image', filename))
             else:
-                # 🟢 تعيين الصورة الافتراضية في حال لم تُرفع صورة
+       
                 image_filename = "image/defult.jpg"
     
             cursor.execute(
@@ -244,28 +265,31 @@ def admin_manage_menu():
         price = form['edit_item_price']
         category_id = form['edit_item_category']
         image = files.get('edit_item_image')
-
+        hidden = 1 if form.get('edit_item_hidden') == '1' else 0
+    
         if image and image.filename != '':
             filename = secure_filename(image.filename)
             image_filename = f"image/{filename}"
             image.save(os.path.join('static/image', filename))
-
+    
+            # حذف الصورة القديمة إذا كانت موجودة
             old = cursor.execute("SELECT image FROM MenuItem WHERE id = ?", (item_id,)).fetchone()
             if old and old['image']:
                 old_path = os.path.join('static', old['image'])
                 if os.path.exists(old_path):
                     os.remove(old_path)
-
+    
             cursor.execute(
-                "UPDATE MenuItem SET name=?, price=?, category_id=?, image=? WHERE id=?",
-                (name, price, category_id, image_filename, item_id)
+                "UPDATE MenuItem SET name=?, price=?, category_id=?, image=?, hidden=? WHERE id=?",
+                (name, price, category_id, image_filename, hidden, item_id)
             )
         else:
             cursor.execute(
-                "UPDATE MenuItem SET name=?, price=?, category_id=? WHERE id=?",
-                (name, price, category_id, item_id)
+                "UPDATE MenuItem SET name=?, price=?, category_id=?, hidden=? WHERE id=?",
+                (name, price, category_id, hidden, item_id)
             )
         flash("✏️ تم تعديل الصنف.")
+
 
     elif action == 'delete_item' and 'delete_item_id' in form:
         item_id = form['delete_item_id']
@@ -276,6 +300,9 @@ def admin_manage_menu():
                 os.remove(path)
         cursor.execute("DELETE FROM MenuItem WHERE id = ?", (item_id,))
         flash("🗑️ تم حذف الصنف.")
+        
+        
+    
 
     # --- إدارة المكونات الثابتة ---
     elif action == 'add_fixed' and 'add_fixed_name' in form:
@@ -479,35 +506,41 @@ def feedback():
 @app.route('/Showfeedbacks')
 @login_required
 def show_feedbacks():
-    selected_month = request.args.get('month')  # يستقبل قيمة الشهر من رابط الصفحة، مثلا ?month=7
+    selected_day = request.args.get('day')  
 
-    conn = get_db_connection()  # اتصال بقاعدة البيانات
+    conn = get_db_connection()
     cursor = conn.cursor()
 
-    if selected_month and selected_month.isdigit():
-        month_str = selected_month.zfill(2)  # يحول 7 إلى '07' لأن strftime('%m') يعيد رقم الشهر 2 خانات
-        query = """
-        SELECT Feedback.content, Feedback.feedback_date, User.name
-        FROM Feedback
-        JOIN User ON Feedback.user_id = User.id
-        WHERE strftime('%m', Feedback.feedback_date) = ?
-        ORDER BY Feedback.feedback_date DESC
-        """
-        cursor.execute(query, (month_str,))
-    else:
-        query = """
-        SELECT Feedback.content, Feedback.feedback_date, User.name
-        FROM Feedback
-        JOIN User ON Feedback.user_id = User.id
-        ORDER BY Feedback.feedback_date DESC
-        """
-        cursor.execute(query)
+    base_query = """
+    SELECT Feedback.content, Feedback.feedback_date, User.name
+    FROM Feedback
+    JOIN User ON Feedback.user_id = User.id
+    WHERE date(Feedback.feedback_date) >= date('now', '-7 days')
+    """
+
+    params = []
+
+    if selected_day:
+        base_query += " AND strftime('%w', Feedback.feedback_date) = ?"
+        days_map = {
+            'Sunday': '0',
+            'Monday': '1',
+            'Tuesday': '2',
+            'Wednesday': '3',
+            'Thursday': '4',
+            'Friday': '5',
+            'Saturday': '6'
+        }
+        params.append(days_map.get(selected_day, ''))
+
+    base_query += " ORDER BY Feedback.feedback_date DESC"
+    cursor.execute(base_query, params)
 
     feedbacks = cursor.fetchall()
     conn.commit()
     conn.close()
 
-    return render_template('showfeedback.html', pagetitle="الملاحظات", feedbacks=feedbacks, selected_month=selected_month)
+    return render_template('showfeedback.html', pagetitle="ملاحظات الأسبوع", feedbacks=feedbacks, selected_day=selected_day)
 
 #---------------------------------------------------------------------------------------------------------------------
 

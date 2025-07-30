@@ -12,7 +12,7 @@
         <input type="text" name="add_customizable_name" placeholder="اسم المكون القابل للتخصيص" required class="form-control">
       </div>
       <div class="col-md-4">
-        <button type="submit" name="action" value="add_customizable" class="btn btn-primary w-100">➕ إضافة مكون</button>
+        <button type="submit" name="action" value="add_customizable" class="btn btn-primary w-100"> إضافة مكون</button>
       </div>
     </div>
   </form>
@@ -35,7 +35,7 @@
         <!-- نموذج حذف مكون -->
         <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف المكون؟');" class="d-inline-block">
           <input type="hidden" name="delete_customizable_id" value="{{ ingr.id }}">
-          <td><button name="action" value="delete_customizable" class="btn btn-danger btn-sm">🗑️ حذف</button></td>
+          <td><button name="action" value="delete_customizable" class="btn btn-danger btn-sm"> حذف</button></td>
         </form>
       </tr>
       {% else %}

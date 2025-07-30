@@ -39,7 +39,10 @@
         <th>الفئة</th>
         <th>الصورة</th>
         <th>تعديل</th>
+        <th>إخفاء</th>
         <th>حذف</th>
+
+
       </tr>
     </thead>
     <tbody>
@@ -75,8 +78,16 @@
           </td>
           <td data-label="تعديل">
             <button name="action" value="edit_item" class="btn no-hover btn-sm rounded-3 px-3">
-              ✏️ تعديل
+               تعديل
             </button>
+          </td>
+          <td data-label="الإخفاء">
+            <div class="form-check">
+              <label for="" class="no-hover">مخفي</label>
+              <input class="form-check-input" type="checkbox" name="edit_item_hidden" value="1"
+                    id="edit_item_hidden_{{ item.id }}"
+                    {% if item.hidden %}checked{% endif %}>
+            </div>
           </td>
         </form>
 
@@ -85,10 +96,12 @@
           <input type="hidden" name="delete_item_id" value="{{ item.id }}">
           <td data-label="حذف">
             <button name="action" value="delete_item" class="btn no-hover btn-sm rounded-3 px-3">
-              🗑️ حذف
+               حذف
             </button>
           </td>
         </form>
+
+
       </tr>
       {% endfor %}
     </tbody>

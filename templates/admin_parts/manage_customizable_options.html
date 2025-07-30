@@ -22,13 +22,13 @@
                     <input type="hidden" name="edit_option_id" value="{{ opt.id }}">
                     <input name="edit_option_name" value="{{ opt.name }}" class="form-control w-50 me-2" required>
                     <input type="number" step="0.01" name="edit_option_extra_price" value="{{ opt.extra_price or 0 }}" class="form-control w-25 me-2" min="0">
-                    <button name="action" value="edit_option" class="btn btn-success btn-sm">✏️ تعديل</button>
+                    <button name="action" value="edit_option" class="btn btn-success btn-sm"> تعديل</button>
                   </form>
                 </td>
                 <td>
                   <form method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الخيار؟');">
                     <input type="hidden" name="delete_option_id" value="{{ opt.id }}">
-                    <button name="action" value="delete_option" class="btn btn-danger btn-sm">🗑️ حذف</button>
+                    <button name="action" value="delete_option" class="btn btn-danger btn-sm"> حذف</button>
                   </form>
                 </td>
               </tr>
@@ -42,7 +42,7 @@
         <input type="hidden" name="customizable_id_for_option" value="{{ c.id }}">
         <input name="add_option_name" required class="form-control w-50" placeholder="اسم خيار جديد">
         <input type="number" step="0.01" name="add_option_extra_price" class="form-control w-25" min="0" placeholder="سعر إضافي (اختياري)">
-        <button type="submit" name="action" value="add_option" class="btn btn-primary">➕ إضافة خيار</button>
+        <button type="submit" name="action" value="add_option" class="btn btn-primary"> إضافة خيار</button>
       </form>
     </div>
   {% endfor %}
